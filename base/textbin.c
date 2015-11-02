@@ -41,7 +41,6 @@ void TextBinDecode(Input* in, Output* out) {
   Byte ch[8] = {0};
   Byte* start = ch + 4;
   Byte* cur = 0;
-  Int nchars = 0;
   while (Read(in, ch, 1)) {
     cur = start;
     if (ch[0] >= 0x20 && ch[0] <= 0x5F) {

@@ -7,21 +7,21 @@
 struct InputImpl;
 typedef struct {
   struct InputImpl* impl;
-  Byte* (*get)(struct InputImpl* impl);
+  Int (*read)(struct InputImpl* impl, Byte* outBuf, Int readBytes);
 } Input;
 
-STATIC_INLINE Byte* Get(Input* self) {
-  return self->get(self->impl);
+STATIC_INLINE Int Read(Input* self, Byte* outBuf, Int readBytes) {
+  return self->read(self->impl, outBuf, readBytes);
 }
 
 struct OutputImpl;
 typedef struct {
   struct OutputImpl* impl;
-  Int (*put)(struct OutputImpl* impl, Tstr str);
+  Int (*write)(struct OutputImpl* impl, Tstr str);
 } Output;
 
-STATIC_INLINE Int Put(Output* self, Tstr str) {
-  return self->put(self->impl, str);
+STATIC_INLINE Int Write(Output* self, Tstr str) {
+  return self->write(self->impl, str);
 }
 
 #endif /* BASE_STREAM_H */
