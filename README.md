@@ -1,2 +1,2 @@
 # alibofc
-A simple library written with c.
+A simple library written by C.
