@@ -33,7 +33,7 @@
 #endif
 ```
 
-**#if, #elif**
+\#if, #elif
 
 > The expression is a constant expression, using only literals and identifiers, defined using #define directive. 
   Any identifier, which is not literal, non defined using #define directive, evaluates to 0.
@@ -41,11 +41,11 @@
   if the identifier was defined using #define directive and 0 otherwise. If the expression evaluates to nonzero value, 
   the controlled code block is included and skipped otherwise. If any used identifier is not a constant, it is replaced with ​0​.
 
-**#ifdef, #ifndef**
+\#ifdef, #ifndef
 
 > Checks if the identifier was defined using #define directive.  
-> #ifdef identifier is essentially equivalent to #if defined( identifier).  
-> #ifndef identifier is essentially equivalent to #if !defined( identifier).  
+> \#ifdef identifier is essentially equivalent to #if defined( identifier).  
+> \#ifndef identifier is essentially equivalent to #if !defined( identifier).  
 
 ## line and filename
 ```c
