@@ -60,12 +60,14 @@
 #line lineno "filename"
 ```
 > Changes the current preprocessor line number to lineno. 
-  Occurrences of the macro __LINE__ beyond this point will expand to lineno plus 
+  Occurrences of the macro \_\_LINE__ beyond this point will expand to lineno plus 
   the number of actual source code lines encountered since.
   It can also change the current preprocessor file name to filename. 
-  Occurrences of the macro __FILE__ beyond this point will produce filename.
-> This directive is used by some automatic code generation tools which produce C++ source files from a file written in another language. In that case, #line directives may be inserted in the generated C++ file referencing line numbers and the file name of the original (human-editable) source file.
+  Occurrences of the macro \_\_FILE__ beyond this point will produce filename.
+  
+> This directive is used by some automatic code generation tools which produce C source files from a file written in another language. In that case, #line directives may be inserted in the generated C file referencing line numbers and the file name of the original (human-editable) source file.
 
+> Note that: the line number following the directive `#line __LINE__` is implementation-defined.
 
 ## 预处理命令error
 ```c
