@@ -14,7 +14,7 @@
 
 ## condition directives
 ```c
-#if/#ifdef/#ifndef expression [1] must exist
+#if #ifdef #ifndef expression [1] must exist
 // code block
 #elif expression              [2] none or more
 // code block
