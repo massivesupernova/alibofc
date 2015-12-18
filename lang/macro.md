@@ -85,8 +85,8 @@ assert(__LINE__ == 123);
 
 > This directive is used by some automatic code generation tools which produce C source files from a file written in another language. In that case, #line directives may be inserted in the generated C file referencing line numbers and the file name of the original (human-editable) source file.
 
-可以将当前预处理行号修改成lineno，这个命令之后的__LINE__会以这个行号为基准来表示（这个行号是该命令下一行的行号）。
-也可以将当前预处理文件名修改成filename，这个命令之后的__FILE__会用这个文件名表示。
+可以将当前预处理行号修改成lineno，这个命令之后的\_\_LINE__会以这个行号为基准来表示（这个行号是该命令下一行的行号）。
+也可以将当前预处理文件名修改成filename，这个命令之后的\_\_FILE__会用这个文件名表示。
 注意的是`#line __LINE__`与编译器实现相关，对应的行号可能是line命令所在行的行号或前一行的行号，应该避免使用。
 
 这个预处理命令可以用在代码自动生成工具中，生成的代码会插入line命令用来表示当前生成的代码对应的源代码的行数。
