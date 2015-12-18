@@ -22,8 +22,7 @@
 #elif expression
 // code block
 #elif expression
-// code block
-...
+// code block ...
 #else
 // code block
 #endif
