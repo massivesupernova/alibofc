@@ -1,7 +1,7 @@
 
-# Macro
+# C语言宏
 
-## define, undef
+## define和undef
 
 ```c
 #define identifier 
@@ -12,7 +12,7 @@
 #undef identifier
 ```
 
-## condition directives
+## 条件预处理命令
 ```c
 #if #ifdef #ifndef expression [1] must exist
 // code block
@@ -38,11 +38,11 @@
 > The expression is a constant expression, using only literals and identifiers, defined using #define directive. 
   Any identifier, which is not literal, non defined using #define directive, evaluates to 0.
 > The expression may contain unary operators in form `defined identifier` or `defined(identifier)` which return 1 
-  if the identifier was defined using #define directive and 0 otherwise.  
+  if the identifier was defined using #define directive and 0 otherwise.
   If any used identifier is not a constant, it is replaced with 0.
 
 这两个预处理命令后面的表达式必须是常量表达式，只有字面常量和#define定义的名称可以用在这个表达式中。
-如果出现的名称不是#define定义的名称，这个名称会被解析成0；如果名称在宏替换后不是常量，也会替换成0（编译器可能会报错）。
+如果出现的名称不是#define定义的名称，这个名称会被解析成0；如果名称在宏替换后不是常量，也会被解析成0（编译器可能报错）。
 这两个预处理命令可以使用defined操作符，例如defined identifier或defined(identifier)，含义和#ifdef一样。
 
 \#ifdef, #ifndef
@@ -54,19 +54,33 @@
 检查对应的名称是否已经定义或没有定义，如果为真，这个名称应该是由#define定义过的名称，并且没有被#undef。
 另外#ifdef identifier与#if defined(identifier)等价，#ifndef identifier与#if !defined(identifier)等价。
 
-## line and filename
+## 预处理命令line
 ```c
 #line lineno
 #line lineno "filename"
 ```
+> Changes the current preprocessor line number to lineno. 
+  Occurrences of the macro __LINE__ beyond this point will expand to lineno plus 
+  the number of actual source code lines encountered since.
+  It can also change the current preprocessor file name to filename. 
+  Occurrences of the macro __FILE__ beyond this point will produce filename.
+> This directive is used by some automatic code generation tools which produce C++ source files from a file written in another language. In that case, #line directives may be inserted in the generated C++ file referencing line numbers and the file name of the original (human-editable) source file.
 
-## error
+
+## 预处理命令error
 ```c
 // error_message can consist of several words not necessarily in quotes
 #error error_message 
+
+#if MAX_BUFFER_SIZE < 1024
+#error "max buffer size too small"
+#endif
 ```
 
-## predefinitions
+这个预处理命令用于引发一个编译错误，会使编译器停止编译并显示错误消息error_message。
+这个error_message是错误信息字符串，可以不用双引号引起。其用法一般是与条件预处理命令一起使用。
+
+## 预定义宏
 ```c
 
 ```
