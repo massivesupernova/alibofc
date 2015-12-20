@@ -12,30 +12,54 @@
 #undef identifier
 ```
 
+宏可以使用...传入不定个数参数，...只能作为最后一个形参。
+在Visual Studio 2013上测试，只能在...形参处传入__VA_ARGS__。
 
-\#
+stringification #
 
-In function-like macros, a # operator before an identifier in the replacement-list runs the identifier through parameter replacement and encloses the result in quotes, effectively creating a string literal. In addition, the preprocessor adds backslashes to escape the quotes surrounding embedded string literals, if any, and doubles the backslashes within the string as necessary. All leading and trailing whitespace is removed, and any sequence of whitespace in the middle of the text (but not inside embedded string literals) is collapsed to a single space. This operation is called "stringification". If the result of stringification is not a valid string literal, the behavior is undefined.
+In function-like macros, a # operator before an identifier in the replacement-list 
+runs the identifier through parameter replacement and encloses the result in quotes, 
+effectively creating a string literal. 
+In addition, the preprocessor adds backslashes to escape the quotes surrounding embedded string literals, if any, 
+and doubles the backslashes within the string as necessary. 
+All leading and trailing whitespace is removed, and any sequence of whitespace in the middle of the text 
+(but not inside embedded string literals) is collapsed to a single space. 
+This operation is called "stringification". 
+If the result of stringification is not a valid string literal, the behavior is undefined.
 
 ```c
 #define showlist(...) puts(#__VA_ARGS__)
 showlist(1, "x", int); // expands to puts("1, \"x\", int")
 ```
 
-\##
+token-pasting ##
 
-A ## operator between any two successive identifiers in the replacement-list runs parameter replacement on the two identifiers and then concatenates the result. This operation is called "concatenation" or "token pasting". Only tokens that form a valid token together may be pasted: identifiers that form a longer identifier, digits that form a number, or operators + and = that form a +=. A comment cannot be created by pasting / and * because comments are removed from text before macro substitution is considered. If the result of concatenation is not a valid token, the behavior is undefined.
+A ## operator between any two successive identifiers in the replacement-list 
+runs parameter replacement on the two identifiers and then concatenates the result. 
+This operation is called "concatenation" or "token pasting". 
+Only tokens that form a valid token together may be pasted: 
+identifiers that form a longer identifier, digits that form a number, or operators + and = that form a +=. 
+A comment cannot be created by pasting / and * because comments are removed from text before macro substitution is considered.
+If the result of concatenation is not a valid token, the behavior is undefined.
 
-Note: some compilers offer an extension that allows ## to appear after a comma and before __VA_ARGS__, in which case the ## does nothing when __VA_ARGS__ is non-empty, but removes the comma when __VA_ARGS__ is empty: this makes it possible to define macros such as fprintf (stderr, format, ##__VA_ARGS__)
+Note: some compilers offer an extension that allows ## to appear after a comma and before __VA_ARGS__, 
+in which case the ## does nothing when __VA_ARGS__ is non-empty, but removes the comma when __VA_ARGS__ is empty: 
+this makes it possible to define macros such as fprintf (stderr, format, ##__VA_ARGS__).
 
-The problem is that when you have a macro replacement, the preprocessor will only expand the macros recursively if neither the stringizing operator # nor the token-pasting operator ## are applied to it. So, you have to use some extra layers of indirection, you can use the token-pasting operator with a recursively expanded argument.
+The problem is that when you have a macro replacement, 
+the preprocessor will only expand the macros recursively if neither the stringizing operator # nor the token-pasting operator ## are applied to it. So, you have to use some extra layers of indirection, you can use the token-pasting operator with a recursively expanded argument.
 
 6.10.3.1 Argument substitution
 
-After the arguments for the invocation of a function-like macro have been identified, argument substitution takes place. A parameter in the replacement list, unless preceded by a # or ## preprocessing token or followed by a ## preprocessing token (see below), is replaced by the corresponding argument after all macros contained therein have been expanded. Before being substituted, each argument’s preprocessing tokens are completely macro replaced as if they formed the rest of the preprocessing file; no other preprocessing tokens are available.
+After the arguments for the invocation of a function-like macro have been identified, argument substitution takes place. 
+A parameter in the replacement list, unless preceded by a # or ## preprocessing token or followed by a ## preprocessing token,
+is replaced by the corresponding argument after all macros contained therein have been expanded. 
+Before being substituted, each argument’s preprocessing tokens are completely macro replaced 
+as if they formed the rest of the preprocessing file; no other preprocessing tokens are available.
 
-
-If, in the replacement list of a function-like macro, a parameter is immediately preceded or followed by a ## preprocessing token, the parameter is replaced by the corresponding argument’s preprocessing token sequence; [...]
+If, in the replacement list of a function-like macro, 
+a parameter is immediately preceded or followed by a ## preprocessing token, 
+the parameter is replaced by the corresponding argument’s preprocessing token sequence.
 
 For both object-like and function-like macro invocations, before the replacement list is reexamined for more macro names to replace, each instance of a ## preprocessing token in the replacement list (not from an argument) is deleted and the preceding preprocessing token is concatenated with the following preprocessing token.
 
@@ -63,9 +87,11 @@ For both object-like and function-like macro invocations, before the replacement
 6. _RESTARGS_HELPER(MOREARG, 1, 2, 3)
 
 #define VARGS_COUNT(...) _VARGS_COUNT_HELPER(__VA_ARGS__, _VARGS_ARGSEQ_NUM())
-#define _VARGS_ARGSEQ_NUM() 63, 62, ..., 0
+#define _VARGS_ARGSEQ_NUM() 3, 2, 1, 0
 #define _VARGS_COUNT_HELPER(...) _VARGS_COUNT_NUM(__VA_ARGS__)
-#define _VARGS_COUNT_NUM(_1, ..., _63, N, ...) N
+#define _VARGS_COUNT_NUM(_1, _2, _3, N, ...) N
+
+VARGS_COUNT() 
 
 1. VARGS_COUNT(1, 2, 3) 
 2. _VARGS_COUNT_HELPER(1, 2, 3, 63, 62, ..., 0)
@@ -74,19 +100,25 @@ For both object-like and function-like macro invocations, before the replacement
 ```
 I know I can do this:
 
+```c
 #define MACRO(api, ...) \
   bool ret = api(123, ##__VA_ARGS__);
+```
+
 This is just an example, it's part of a more complicated solution. The point is that I need to append the variable number of arguments to the first 123. The ## makes the compiler strip out the comma after the 123 argument if no arguments were passed into MACRO.
 
 But now I want to append arguments to api, like so:
 
+```c
 #define MACRO(api, ...) \
   bool ret = api(__VA_ARGS__##, 456);
-  
+```
+
 Nocando. One solution is to have two macros, MACRO and MACRO_V, say, and make the _V version not process any arguments. But is there a way to make it work with one macro?
-  
+
 Yes, you can. The following supports up to 4 arguments, but it can be trivially expanded to support more:
 
+```
 #define MACRO(api, ...) \
     bool ret = api(__VA_ARGS__ VA_COMMA(__VA_ARGS__) 456)
 
@@ -106,7 +138,7 @@ MACRO(foo,1,2,3,4)               /* bool ret = foo(1,2,3,4 , 456)     */
 /* uh oh, too many arguments: */
 MACRO(foo,1,2,3,4,5)             /* bool ret = foo(1,2,3,4,5 5 456)   */
 MACRO(foo,1,2,3,4,5,6)           /* bool ret = foo(1,2,3,4,5,6 5 456) */
-
+```
 
 
 
@@ -114,6 +146,7 @@ http://gcc.gnu.org/onlinedocs/gcc-4.5.1/gcc/Variadic-Macros.html#Variadic-Macros
 
 gcc does support argument counting macros with zero arguments with the ## __VA_ARGS__ convention. The following works compiled with gcc:
 
+```c
 #include <stdio.h>
 
 #define NARGS(...) __NARGS(0, ## __VA_ARGS__, 5,4,3,2,1,0)
@@ -126,10 +159,13 @@ int main()
   printf("%d\n", NARGS(1, 2)); // prints 2
   return 0;
 }
+```
+
 Is there an equivalent for VisualC++ 2010 that will work with zero arguments macros? Non standard extensions or tricks accepted.
 
 The following example works fine in VisualStudio 2010 and newer, gcc and clang with non standard extensions enabled. In Microsoft compilers it assumes the trailing comma in the AUGMENTER macro will be removed by the preprocessor when arguments count is zero. This is non standard and it has been also reported elsewere. In gcc and clang it uses the widely known ## __VA_ARGS__ non standard extension.
 
+```c
 #include <stdio.h>
 
 #ifdef _MSC_VER // Microsoft compilers
@@ -166,6 +202,8 @@ int main()
 
 return 0;
 }
+```
+
 Macros were tested with real compilers, Wandbox and Webcompiler
 
 	 	
