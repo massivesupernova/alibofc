@@ -63,6 +63,16 @@ All leading and trailing whitespace is removed, and any sequence of whitespace i
 This operation is called "stringification". 
 If the result of stringification is not a valid string literal, the behavior is undefined.
 
+宏函数中，替换列表中的标识符如果前面带有#操作符，会用传入的参数对其进行替换，然后用双引号将替换后的结果括起来转换成字符串字面量。
+这里的替换只会简单的用传入的参数直接替换，不会对参数中存在的宏进行彻底展开。例如:
+```c
+#define TOKEN_STRING(a) #a
+#define MAX_SIZE 64
+TOKEN_STRING(MAX_SIZE) // will produce "MAX_SIZE" not "64"
+```
+转换成字符串的过程中，预处理器会对引号以及反斜杠进行转义，并且移除开头和末尾的空白，
+并将内容内部的空白都压缩到只剩一个空白符（内容内部的内嵌字符串字面量中的空白不会压缩）。
+如果转换的结果不是一个合法的字符串字面量，则该操作的行为是未定义的。
 ```c
 #define showlist(...) puts(#__VA_ARGS__)
 showlist(1, "x", int); // expands to puts("1, \"x\", int")
@@ -84,6 +94,35 @@ this makes it possible to define macros such as fprintf (stderr, format, ##__VA_
 
 The problem is that when you have a macro replacement, 
 the preprocessor will only expand the macros recursively if neither the stringizing operator # nor the token-pasting operator ## are applied to it. So, you have to use some extra layers of indirection, you can use the token-pasting operator with a recursively expanded argument.
+
+3.8.3.1 Argument substitution
+
+After the arguments for the invocation of a function-like macro
+have been identified, argument substitution takes place. A parameter in the replacement list, unless preceded by a # or ## preprocessing token or followed by a ## preprocessing token (see below), is replaced by the corresponding argument after all macros contained therein have been expanded. Before being substituted, each argument's preprocessing tokens are completely macro replaced as if they formed the rest of the source file; no other preprocessing tokens are available.
+
+
+3.8.3.2 The # operator
+
+Constraints
+
+Each # preprocessing token in the replacement list for a function-like macro shall be followed by a parameter as the next preprocessing token in the replacement list.
+
+Semantics
+
+If, in the replacement list, a parameter is immediately preceded by a # preprocessing token, both are replaced by a single character string literal preprocessing token that contains the spelling of the preprocessing token sequence for the corresponding argument. Each occurrence of white space between the argument's preprocessing tokens becomes a single space character in the character string literal. White space before the first preprocessing token and after the last preprocessing token comprising the argument is deleted. Otherwise, the original spelling of each preprocessing token in the argument is retained in the character string literal, except for special handling for producing the spelling of string literals and character constants: a \ character is inserted before each and \ character of a character
+constant or string literal (including the delimiting characters). If the replacement that results is not a valid character string literal, the behavior is undefined. The order of evaluation of # and ## operators is unspecified.
+
+
+3.8.3.3 The ## operator
+
+Constraints
+
+A ## preprocessing token shall not occur at the beginning or at the end of a replacement list for either form of macro definition. 
+
+Semantics
+
+If, in the replacement list, a parameter is immediately preceded or followed by a ## preprocessing token, the parameter is replaced by the corresponding argument's preprocessing token sequence. For both object-like and function-like macro invocations, before the replacement list is reexamined for more macro names to replace, each instance of a ## preprocessing token in the replacement list (not from an argument) is deleted and the preceding preprocessing token is concatenated with the following preprocessing token. If the result is not a valid preprocessing token, the behavior is undefined. The
+resulting token is available for further macro replacement. The order of evaluation of ## operators is unspecified.
 
 6.10.3.1 Argument substitution
 
