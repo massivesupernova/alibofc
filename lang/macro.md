@@ -44,6 +44,12 @@ PRINT2("string") // GCC=> printf("string")
 
 宏如果扩展成多条语句，为避免出错应该用do { ... } while (0)将多条语句包裹起来。
 另外宏的每个参数应该都只使用一次，且每个参数都用小括号括起。
+```c
+#define ABCD() foo(); bar()
+if (expr) ABCD(); // unexpected, fine when modify to #define ABCD() do { foo(); bar(); } while (0)
+#define CALL(a) (f1(a), f2(a)) // use a twice
+CALL(foo()) // expanded to: (f1(foo()), f2(foo()), may be the expected behavior is `a = foo(), f1(a), f2(a)`
+```
 
 stringification #
 
