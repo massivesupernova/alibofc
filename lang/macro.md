@@ -48,10 +48,10 @@ PRINT2("string") // GCC=> printf("string")
 #define ABCD() foo(); bar()
 if (expr) ABCD(); // unexpected, fine when modify to #define ABCD() do { foo(); bar(); } while (0)
 #define CALL(a) (f1(a), f2(a)) // use parameter `a` twice
-CALL(foo()) // expanded to: (f1(foo()), f2(foo()), may be the expected behavior is `a = foo(), f1(a), f2(a)`
+CALL(foo()) // expanded to: (f1(foo()), f2(foo()), but expected behavior may be `a=foo(), f1(a), f2(a)`
 ```
 
-stringification #
+**stringification #**
 
 In function-like macros, a # operator before an identifier in the replacement-list 
 runs the identifier through parameter replacement and encloses the result in quotes, 
@@ -62,6 +62,7 @@ All leading and trailing whitespace is removed, and any sequence of whitespace i
 (but not inside embedded string literals) is collapsed to a single space. 
 This operation is called "stringification". 
 If the result of stringification is not a valid string literal, the behavior is undefined.
+The order of evaluation of # and ## operators is unspecified.
 
 宏函数中，替换列表中的标识符如果前面带有#操作符，会用传入的参数对其进行替换，
 然后用双引号将替换后的结果括起来转换成字符串字面量。
@@ -74,12 +75,13 @@ TOKEN_STRING(MAX_SIZE) // will produce "MAX_SIZE" not "64"
 转换成字符串的过程中，预处理器会对引号以及反斜杠进行转义，并且移除开头和末尾的空白，
 并将内容内部的空白都压缩到只剩一个空白符（内容内部的内嵌字符串字面量中的空白不会压缩）。
 如果转换的结果不是一个合法的字符串字面量，则该操作的行为是未定义的。
+如果有一个标志符的前面有#操作，后面有##操作，#和##的操作顺序是未定义的。
 ```c
 #define showlist(...) puts(#__VA_ARGS__)
 showlist(1, "x", int); // expands to puts("1, \"x\", int")
 ```
 
-token-pasting ##
+**token-pasting ##**
 
 A ## operator between any two successive identifiers in the replacement-list 
 runs parameter replacement on the two identifiers and then concatenates the result. 
@@ -89,6 +91,8 @@ identifiers that form a longer identifier, digits that form a number, or operato
 A comment cannot be created by pasting / and * because comments are removed 
 from text before macro substitution is considered.
 If the result of concatenation is not a valid token, the behavior is undefined.
+The resulting token is available for further macro replacement. 
+The order of evaluation of ## operators is unspecified.
 
 Note: some compilers offer an extension that allows ## to appear after a comma and before \_\_VA_ARGS__, 
 in which case the ## does nothing when \_\_VA_ARGS__ is non-empty, but removes the comma when \_\_VA_ARGS__ is empty: 
@@ -98,215 +102,54 @@ this makes it possible to define macros such as `fprintf(stderr, format, ##__VA_
 然后将替换后的结果连接起来形成一个token。这里的替换只会简单的用传入的参数直接替换，不会对参数中存在的宏进行彻底展开。
 这种操作称为token粘贴，只有能连接成一个合法的token，这个操作才是合法的。例如将两个标志符拼接成一个更长的标志符；
 将数字拼接成一个更长的数值；将+和=拼接成+=等等。不能用将/和*拼接成注释，因为注释在处理宏替换之前已经从代码中移除了。
-如果拼接的结果不是一个合法的token，则##操作的行为是未定义的。
+如果拼接的结果不是一个合法的token，则##操作的行为是未定义的。拼接的结果如果是宏，会像其他宏一样继续进行宏替换。
+另外，连续多个##操作的执行顺序是未定义的。
 
 有些编译器如GCC允许##出现在逗号和\_\_VA_ARGS__之间，它允许对变成参数...传入0个参数，
 此时\_\_VA_ARGS__前面的逗号会被编译器移除；如果传入的参数不是0个，这个特殊的##操作会被忽略。
 这个扩展的操作使得定义这样的宏`fprintf(stderr, format, ##VA_ARGS)`成为可能。
 
-The problem is that when you have a macro replacement, 
-the preprocessor will only expand the macros recursively if neither the stringizing operator # 
-nor the token-pasting operator ## are applied to it. So, you have to use some extra layers of indirection, 
-you can use the token-pasting operator with a recursively expanded argument.
-
-3.8.3.1 Argument substitution
-
-After the arguments for the invocation of a function-like macro
-have been identified, argument substitution takes place. A parameter in the replacement list, unless preceded by a # or ## preprocessing token or followed by a ## preprocessing token (see below), is replaced by the corresponding argument after all macros contained therein have been expanded. Before being substituted, each argument's preprocessing tokens are completely macro replaced as if they formed the rest of the source file; no other preprocessing tokens are available.
-
-
-3.8.3.2 The # operator
-
-Constraints
-
-Each # preprocessing token in the replacement list for a function-like macro shall be followed by a parameter as the next preprocessing token in the replacement list.
-
-Semantics
-
-If, in the replacement list, a parameter is immediately preceded by a # preprocessing token, both are replaced by a single character string literal preprocessing token that contains the spelling of the preprocessing token sequence for the corresponding argument. Each occurrence of white space between the argument's preprocessing tokens becomes a single space character in the character string literal. White space before the first preprocessing token and after the last preprocessing token comprising the argument is deleted. Otherwise, the original spelling of each preprocessing token in the argument is retained in the character string literal, except for special handling for producing the spelling of string literals and character constants: a \ character is inserted before each and \ character of a character
-constant or string literal (including the delimiting characters). If the replacement that results is not a valid character string literal, the behavior is undefined. The order of evaluation of # and ## operators is unspecified.
-
-
-3.8.3.3 The ## operator
-
-Constraints
-
-A ## preprocessing token shall not occur at the beginning or at the end of a replacement list for either form of macro definition. 
-
-Semantics
-
-If, in the replacement list, a parameter is immediately preceded or followed by a ## preprocessing token, the parameter is replaced by the corresponding argument's preprocessing token sequence. For both object-like and function-like macro invocations, before the replacement list is reexamined for more macro names to replace, each instance of a ## preprocessing token in the replacement list (not from an argument) is deleted and the preceding preprocessing token is concatenated with the following preprocessing token. If the result is not a valid preprocessing token, the behavior is undefined. The
-resulting token is available for further macro replacement. The order of evaluation of ## operators is unspecified.
-
-6.10.3.1 Argument substitution
-
-After the arguments for the invocation of a function-like macro have been identified, argument substitution takes place. 
-A parameter in the replacement list, unless preceded by a # or ## preprocessing token or followed by a ## preprocessing token,
-is replaced by the corresponding argument after all macros contained therein have been expanded. 
-Before being substituted, each argument’s preprocessing tokens are completely macro replaced 
-as if they formed the rest of the preprocessing file; no other preprocessing tokens are available.
-
-If, in the replacement list of a function-like macro, 
-a parameter is immediately preceded or followed by a ## preprocessing token, 
-the parameter is replaced by the corresponding argument’s preprocessing token sequence.
-
-For both object-like and function-like macro invocations, before the replacement list is reexamined for more macro names to replace, each instance of a ## preprocessing token in the replacement list (not from an argument) is deleted and the preceding preprocessing token is concatenated with the following preprocessing token.
-
 ```c
-// the standard says that there must be at least one argument for the ellipsis of `...`
-
+// gcc version of separating first arg and rest args
+#define VARGS_FIRSTARG(...) _FIRSTARG_HELPER(__VA_ARGS__, ellipsis)
+#define VARGS_RESTARGS(...) _RESTARGS_HELPER_EX(_VARGS_ONE_OR_MORE(__VA_ARGS__), __VA_ARGS__)
 #define _FIRSTARG_HELPER(first, ...) first
 #define _RESTARGS_OF_ONE1ARG(first) 
 #define _RESTARGS_OF_MOREARG(first, ...) , __VA_ARGS__
 #define _RESTARGS_HELPER(tail, ...) _RESTARGS_OF_##tail(__VA_ARGS__)
 #define _RESTARGS_HELPER_EX(tail, ...) _RESTARGS_HELPER(tail, __VA_ARGS__)
-
 #define _VARGS_MAX_16_ARGS(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, aa, ab, ac, ad, ae, af, ...) af
 #define _VARGS_MORETOKS_14(m) m, m, m, m, m, m, m, m, m, m, m, m, m, m, 
 #define _VARGS_ONE_OR_MORE(...) _VARGS_MAX_16_ARGS(__VA_ARGS__, _VARGS_MORETOKS_14(MOREARG), ONE1ARG, ellipsis)
 
-#define VARGS_FIRSTARG(...) _FIRSTARG_HELPER(__VA_ARGS__, ellipsis)
-#define VARGS_RESTARGS(...) _RESTARGS_HELPER_EX(_VARGS_ONE_OR_MORE(__VA_ARGS__), __VA_ARGS__)
-
-1. VARGS_RESTARGS(1, 2, 3) 
-2. _RESTARGS_HELPER_EX(_VARGS_ONE_OR_MORE(1, 2, 3), 1, 2, 3)
-3. _RESTARGS_HELPER_EX(_VARGS_MAX_16_ARGS(1, 2, 3, _VARGS_MORETOKS_14(MOREARG), ONE1ARG, ellipsis), 1, 2, 3)
-4. _RESTARGS_HELPER_EX(_VARGS_MAX_16_ARGS(1, 2, 3, MOREARG, MOREARG, ..., ONE1ARG, ellipsis), 1, 2, 3)
-5. _RESTARGS_HELPER_EX(MOREARG, 1, 2, 3)
-6. _RESTARGS_HELPER(MOREARG, 1, 2, 3)
-
-#define VARGS_COUNT(...) _VARGS_COUNT_HELPER(__VA_ARGS__, _VARGS_ARGSEQ_NUM())
-#define _VARGS_ARGSEQ_NUM() 3, 2, 1, 0
-#define _VARGS_COUNT_HELPER(...) _VARGS_COUNT_NUM(__VA_ARGS__)
-#define _VARGS_COUNT_NUM(_1, _2, _3, N, ...) N
-
-VARGS_COUNT() 
-
-1. VARGS_COUNT(1, 2, 3) 
-2. _VARGS_COUNT_HELPER(1, 2, 3, 63, 62, ..., 0)
-3. _VARGS_COUNT_NUM(1, 2, 3, 63, 62, ..., 0)
-4. 3
+// gcc version of counting the number of arguments
+#define VARGS_N(...) _VARGS_N_HELPER(0, ## __VA_ARGS__, 5, 4, 3, 2, 1, 0)
+#define _VARGS_N_HELPER(a0, a1, a2, a3, a4, a5, N, ...) N
 ```
-I know I can do this:
 
+6.10.3.1 Argument substitution
+
+After the arguments for the invocation of a function-like macro have been identified, argument substitution takes place. 
+A parameter in the replacement list, unless preceded by a # or ## preprocessing token 
+or followed by a ## preprocessing token, is replaced by the corresponding argument 
+after all macros contained therein have been expanded. 
+Before being substituted, each argument’s preprocessing tokens are completely macro replaced 
+as if they formed the rest of the preprocessing file; no other preprocessing tokens are available.
+
+当传入宏函数的实参全部鉴别出来，就会进行参数替换。
+宏定义替换列表中的形参，如果其前面没有#或##操作符，其后面没有##操作符，
+就会用对应实参的彻底展开结果对这个形参进行替换。在替换前，实参中包含的所有宏都被完全展开。
+而如果有#或##操作，实参会在展开前进行字符串化或token粘贴操作。
+如下面的例子，宏TOKEN_PASTE中形参x和y都没有#和##操作，因此TOKEN_PASTE(ONE, TWO)传入的两个实参会首先进行彻底展开，
+ONE会彻底展开成123，TWO会彻底展开成123，然后对形参x和y进行替换得到TOKEN_PASTE_HELPER(123, 123)，
+由于TOKEN_PASTE_HELPER中的形参x和y有##操作，会直接进行替换，得到123123。
 ```c
-#define MACRO(api, ...) \
-  bool ret = api(123, ##__VA_ARGS__);
+#define TOKEN_PASTE_HELPER(x, y) x ## y
+#define TOKEN_PASTE(x, y) TOKEN_PASTE_HELPER(x, y)
+#define ONE 123
+#define TWO ONE
+TOKEN_PASTE(ONE, TWO)
 ```
-
-This is just an example, it's part of a more complicated solution. The point is that I need to append the variable number of arguments to the first 123. The ## makes the compiler strip out the comma after the 123 argument if no arguments were passed into MACRO.
-
-But now I want to append arguments to api, like so:
-
-```c
-#define MACRO(api, ...) \
-  bool ret = api(__VA_ARGS__##, 456);
-```
-
-Nocando. One solution is to have two macros, MACRO and MACRO_V, say, and make the _V version not process any arguments. But is there a way to make it work with one macro?
-
-Yes, you can. The following supports up to 4 arguments, but it can be trivially expanded to support more:
-
-```
-#define MACRO(api, ...) \
-    bool ret = api(__VA_ARGS__ VA_COMMA(__VA_ARGS__) 456)
-
-/*
- * VA_COMMA() expands to nothing if given no arguments and a comma if
- * given 1 to 4 arguments.  Bad things happen if given more than 4
- * arguments.  Don't do it.
- */
-#define VA_COMMA(...) GET_6TH_ARG(,##__VA_ARGS__,COMMA,COMMA,COMMA,COMMA,)
-#define GET_6TH_ARG(a1,a2,a3,a4,a5,a6,...) a6
-#define COMMA ,
-
-/* EXAMPLES */
-MACRO(foo)                       /* bool ret = foo( 456)              */
-MACRO(foo,1)                     /* bool ret = foo(1 , 456)           */
-MACRO(foo,1,2,3,4)               /* bool ret = foo(1,2,3,4 , 456)     */
-/* uh oh, too many arguments: */
-MACRO(foo,1,2,3,4,5)             /* bool ret = foo(1,2,3,4,5 5 456)   */
-MACRO(foo,1,2,3,4,5,6)           /* bool ret = foo(1,2,3,4,5,6 5 456) */
-```
-
-
-
-http://gcc.gnu.org/onlinedocs/gcc-4.5.1/gcc/Variadic-Macros.html#Variadic-Macros
-
-gcc does support argument counting macros with zero arguments with the ## __VA_ARGS__ convention. The following works compiled with gcc:
-
-```c
-#include <stdio.h>
-
-#define NARGS(...) __NARGS(0, ## __VA_ARGS__, 5,4,3,2,1,0)
-#define __NARGS(_0,_1,_2,_3,_4,_5,N,...) N
-
-int main()
-{
-  printf("%d\n", NARGS());     // prints 0
-  printf("%d\n", NARGS(1));    // prints 1
-  printf("%d\n", NARGS(1, 2)); // prints 2
-  return 0;
-}
-```
-
-Is there an equivalent for VisualC++ 2010 that will work with zero arguments macros? Non standard extensions or tricks accepted.
-
-The following example works fine in VisualStudio 2010 and newer, gcc and clang with non standard extensions enabled. In Microsoft compilers it assumes the trailing comma in the AUGMENTER macro will be removed by the preprocessor when arguments count is zero. This is non standard and it has been also reported elsewere. In gcc and clang it uses the widely known ## __VA_ARGS__ non standard extension.
-
-```c
-#include <stdio.h>
-
-#ifdef _MSC_VER // Microsoft compilers
-
-#define EXPAND(x) x
-#define __NARGS(_1, _2, _3, _4, _5, VAL, ...) VAL
-#define NARGS_1(...) EXPAND(__NARGS(__VA_ARGS__, 4, 3, 2, 1, 0))
-
-#define AUGMENTER(...) unused, __VA_ARGS__
-#define NARGS(...) NARGS_1(AUGMENTER(__VA_ARGS__))
-
-#else // Others
-
-#define NARGS(...) __NARGS(0, ## __VA_ARGS__, 5,4,3,2,1,0)
-#define __NARGS(_0,_1,_2,_3,_4,_5,N,...) N
-
-#endif
-
-int main()
-{
-  // NARGS
-  printf("%d\n", NARGS());          // Prints 0
-  printf("%d\n", NARGS(1));         // Prints 1
-  printf("%d\n", NARGS(1, 2));      // Prints 2
-  fflush(stdout);
-
-#ifdef _MSC_VER
-  // NARGS minus 1
-  printf("\n");
-  printf("%d\n", NARGS_1(1));       // Prints 0
-  printf("%d\n", NARGS_1(1, 2));    // Prints 1
-  printf("%d\n", NARGS_1(1, 2, 3)); // Prints 2
-#endif
-
-return 0;
-}
-```
-
-Macros were tested with real compilers, Wandbox and Webcompiler
-
-	 	
-this version does not work properly with GCC. – BLUEPIXY Nov 1 '14 at 1:38
-  	 	
-@BLUEPIXY: I also wrote the relevant macro that works with GCC C/C++ compilers with GNU extensions enabled. – ceztko Dec 15 '14 at 11:17
-  	 	
-Nice: someone downvoted and didn't write why. These macros costed hours of work so I would be pleased to know if they don't work for someone. – ceztko Apr 25 at 15:35 
-  	 	
-woaaa! EXPAND(x) x seems to be the one thing that I was missing to get my argument counter macro working in Visual Studio. I don't understand why this doesn't work for non-gnu gcc/clang. Either way, I'm upvoting this answer for the visual studio solution which saved me hours of research. Thank you! – mchiasson Jun 4 at 14:51 
-  	 	
-EXPAND(x) x need is actually a bug in the VS2010 preprocessor that is fixed in the following releases. – ceztko Jun 5 at 21:45.
-
-@mchiasson You may have a look at my complete answer here that comes with 2 versions that will respectively work with msvc and gcc/clang with extensions enabled. They can be easily ifdef-ed for wide compilers support. – ceztko Jun 4 at 14:18 
 
 ## 条件预处理命令
 ```c
