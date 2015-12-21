@@ -1,7 +1,7 @@
 
 # C语言宏
 
-## define和undef
+## 宏定义
 
 ```c
 #define identifier 
@@ -63,7 +63,8 @@ All leading and trailing whitespace is removed, and any sequence of whitespace i
 This operation is called "stringification". 
 If the result of stringification is not a valid string literal, the behavior is undefined.
 
-宏函数中，替换列表中的标识符如果前面带有#操作符，会用传入的参数对其进行替换，然后用双引号将替换后的结果括起来转换成字符串字面量。
+宏函数中，替换列表中的标识符如果前面带有#操作符，会用传入的参数对其进行替换，
+然后用双引号将替换后的结果括起来转换成字符串字面量。
 这里的替换只会简单的用传入的参数直接替换，不会对参数中存在的宏进行彻底展开。例如:
 ```c
 #define TOKEN_STRING(a) #a
@@ -85,7 +86,8 @@ runs parameter replacement on the two identifiers and then concatenates the resu
 This operation is called "concatenation" or "token pasting". 
 Only tokens that form a valid token together may be pasted: 
 identifiers that form a longer identifier, digits that form a number, or operators + and = that form a +=. 
-A comment cannot be created by pasting / and * because comments are removed from text before macro substitution is considered.
+A comment cannot be created by pasting / and * because comments are removed 
+from text before macro substitution is considered.
 If the result of concatenation is not a valid token, the behavior is undefined.
 
 Note: some compilers offer an extension that allows ## to appear after a comma and before __VA_ARGS__, 
@@ -93,7 +95,9 @@ in which case the ## does nothing when __VA_ARGS__ is non-empty, but removes the
 this makes it possible to define macros such as fprintf (stderr, format, ##__VA_ARGS__).
 
 The problem is that when you have a macro replacement, 
-the preprocessor will only expand the macros recursively if neither the stringizing operator # nor the token-pasting operator ## are applied to it. So, you have to use some extra layers of indirection, you can use the token-pasting operator with a recursively expanded argument.
+the preprocessor will only expand the macros recursively if neither the stringizing operator # 
+nor the token-pasting operator ## are applied to it. So, you have to use some extra layers of indirection, 
+you can use the token-pasting operator with a recursively expanded argument.
 
 3.8.3.1 Argument substitution
 
