@@ -47,7 +47,7 @@ PRINT2("string") // GCC=> printf("string")
 ```c
 #define ABCD() foo(); bar()
 if (expr) ABCD(); // unexpected, fine when modify to #define ABCD() do { foo(); bar(); } while (0)
-#define CALL(a) (f1(a), f2(a)) // use a twice
+#define CALL(a) (f1(a), f2(a)) // use parameter `a` twice
 CALL(foo()) // expanded to: (f1(foo()), f2(foo()), may be the expected behavior is `a = foo(), f1(a), f2(a)`
 ```
 
