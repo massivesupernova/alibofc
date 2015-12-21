@@ -1,7 +1,5 @@
 
-# TRAPS
-
-## 无符号整数陷阱
+# 无符号整数陷阱
 
 ```c
 //error C4146: unary minus operator applied to unsigned type, result still unsigned
