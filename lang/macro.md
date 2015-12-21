@@ -186,7 +186,7 @@ const int num = 23;
 #if (NUM == 0)     // false - NUM is a macro and can evaluate to a integer literal 23
 ```
 
-\#if, #elif
+**#if, #elif**
 
 > The expression is a constant expression, using only literals and identifiers, defined using #define directive. 
   Any identifier, which is not literal, non defined using #define directive, evaluates to 0.
@@ -198,7 +198,7 @@ const int num = 23;
 如果出现的名称不是#define定义的名称，这个名称会被解析成0；如果名称在宏替换后不是字面常量，也会被解析成0。
 这两个预处理命令可以使用defined操作符，例如defined identifier或defined(identifier)，含义和#ifdef一样。
 
-\#ifdef, #ifndef
+**#ifdef, #ifndef**
 
 > Checks if the identifier was defined using #define directive.  
 > `#ifdef identifier` is essentially equivalent to `#if defined(identifier)`.  
