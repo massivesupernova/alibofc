@@ -118,9 +118,9 @@ this makes it possible to define macros such as `fprintf(stderr, format, ##__VA_
 #define _RESTARGS_OF_MOREARG(first, ...) , __VA_ARGS__
 #define _RESTARGS_HELPER(tail, ...) _RESTARGS_OF_##tail(__VA_ARGS__)
 #define _RESTARGS_HELPER_EX(tail, ...) _RESTARGS_HELPER(tail, __VA_ARGS__)
-#define _VARGS_MAX_16_ARGS(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, aa, ab, ac, ad, ae, af, ...) af
-#define _VARGS_MORETOKS_14(m) m, m, m, m, m, m, m, m, m, m, m, m, m, m, 
-#define _VARGS_ONE_OR_MORE(...) _VARGS_MAX_16_ARGS(__VA_ARGS__, _VARGS_MORETOKS_14(MOREARG), ONE1ARG, ellipsis)
+#define _VARGS_MAX8_ARGS(a1, a2, a3, a4, a5, a6, a7, a8, ...) a8
+#define _VARGS_MORETOKS6(m) m, m, m, m, m, m  
+#define _VARGS_ONE_OR_MORE(...) _VARGS_MAX8_ARGS(__VA_ARGS__, _VARGS_MORETOKS6(MOREARG), ONE1ARG, ellipsis)
 
 // gcc version of counting the number of arguments
 #define VARGS_N(...) _VARGS_N_HELPER(0, ## __VA_ARGS__, 5, 4, 3, 2, 1, 0)
