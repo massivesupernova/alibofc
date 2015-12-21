@@ -90,9 +90,19 @@ A comment cannot be created by pasting / and * because comments are removed
 from text before macro substitution is considered.
 If the result of concatenation is not a valid token, the behavior is undefined.
 
-Note: some compilers offer an extension that allows ## to appear after a comma and before __VA_ARGS__, 
-in which case the ## does nothing when __VA_ARGS__ is non-empty, but removes the comma when __VA_ARGS__ is empty: 
-this makes it possible to define macros such as fprintf (stderr, format, ##__VA_ARGS__).
+Note: some compilers offer an extension that allows ## to appear after a comma and before \_\_VA_ARGS__, 
+in which case the ## does nothing when \_\_VA_ARGS__ is non-empty, but removes the comma when \_\_VA_ARGS__ is empty: 
+this makes it possible to define macros such as `fprintf(stderr, format, ##__VA_ARGS__)`.
+
+如果替换列表中的两个标志符中间有##操作符，首先会用传入的参数对这两个标志符进行替换，
+然后将替换后的结果连接起来形成一个token。这里的替换只会简单的用传入的参数直接替换，不会对参数中存在的宏进行彻底展开。
+这种操作称为token粘贴，只有能连接成一个合法的token，这个操作才是合法的。例如将两个标志符拼接成一个更长的标志符；
+将数字拼接成一个更长的数值；将+和=拼接成+=等等。不能用将/和*拼接成注释，因为注释在处理宏替换之前已经从代码中移除了。
+如果拼接的结果不是一个合法的token，则##操作的行为是未定义的。
+
+有些编译器如GCC允许##出现在逗号和\_\_VA_ARGS__之间，它允许对变成参数...传入0个参数，
+此时\_\_VA_ARGS__前面的逗号会被编译器移除；如果传入的参数不是0个，这个特殊的##操作会被忽略。
+这个扩展的操作使得定义这样的宏`fprintf(stderr, format, ##VA_ARGS)`成为可能。
 
 The problem is that when you have a macro replacement, 
 the preprocessor will only expand the macros recursively if neither the stringizing operator # 
