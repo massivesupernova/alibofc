@@ -23,8 +23,8 @@ EFGH(a, b, c, d, e)
 ```
 
 标准C要求不定参数...必须传入至少一个参数。但是在GCC和VS上都做了扩展。
-如果传入0个参数，VS会自动把\_\_VA_ARGS__的逗号移除掉；
-而GCC则支持特殊语法 ## \_\_VA_ARGS__，如果参数个数为0，这种写法会移除前面的逗号。
+如果传入0个参数，VS会自动把\_\_VA_ARGS__前面的逗号移除掉；
+而GCC则支持这种特殊语法 ## \_\_VA_ARGS__，当参数个数为0时移除前面的逗号。
 ```c
 #define PRINT(fmt, ...) printf(fmt, __VA_ARGS__)
 PRINT("string") // VS  => printf("string")
@@ -34,7 +34,7 @@ PRINT2("string") // VS => printf("string") VS can support this special ## syntax
 PRINT2("string") // GCC=> printf("string")
 ```
 
-但是\_\_VA_ARGS__后面的逗号不会自动移除，因此要传入至少一个参数，如下面的ARGS_N_HELPER。
+但\_\_VA_ARGS__后面的逗号不会自动移除，因此要传入至少一个参数，如下面的ARGS_N_HELPER。
 这种情况在VS中不存在，因为VS只允许在...处传入\_\_VA_ARGS__，...是最后一个参数，
 \_\_VA_ARGS__也应该是最后一个，其后不会有逗号。 
 ```c
