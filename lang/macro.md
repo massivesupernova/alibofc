@@ -14,15 +14,6 @@
 
 宏可以使用...传入不定个数参数，...只能作为最后一个形参。
 在Visual Studio 2013上测试，只能在...形参处传入\_\_VA_ARGS__。
-例如下面的例子第3行，会报参数不够的错误，ABCD(__VA_ARGS__)认为只传了一个参数。
-```c
-#define ABCD(a, b, c, d, ...) d
-#define EFGH(...) ABCD(__VA_ARGS__)
-EFGH(a, b, c, d, e)
-```
-
-宏可以使用...传入不定个数参数，...只能作为最后一个形参。
-在Visual Studio 2013上测试，只能在...形参处传入\_\_VA_ARGS__。
 例如下面的例子第3行，会报参数不够的错误，ABCD(\_\_VA_ARGS__)认为只传了一个参数。
 但GCC没有这种限制，下面的例子会编译成功。
 ```c
@@ -31,7 +22,7 @@ EFGH(a, b, c, d, e)
 EFGH(a, b, c, d, e)
 ```
 
-标准C要求不定参数...必须至少传入一个参数。但是在GCC和VS上都做了扩展。
+标准C要求不定参数...必须传入至少一个参数。但是在GCC和VS上都做了扩展。
 如果传入0个参数，VS会自动把\_\_VA_ARGS__的逗号移除掉；
 而GCC则支持特殊语法 ## \_\_VA_ARGS__，如果参数个数为0，这种写法会移除前面的逗号。
 ```c
@@ -43,7 +34,7 @@ PRINT2("string") // VS => printf("string") VS can support this special ## syntax
 PRINT2("string") // GCC=> printf("string")
 ```
 
-但是\_\_VA_ARGS__后面的逗号不会自动移除，因此必须传入至少一个参数，如下面的ARGS_N_HELPER。
+但是\_\_VA_ARGS__后面的逗号不会自动移除，因此要传入至少一个参数，如下面的ARGS_N_HELPER。
 这种情况在VS中不存在，因为VS只允许在...处传入\_\_VA_ARGS__，...是最后一个参数，
 \_\_VA_ARGS__也应该是最后一个，其后不会有逗号。 
 ```c
