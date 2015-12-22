@@ -38,13 +38,13 @@ capidecl(const) tint tint_min = 0x8000000000000000;
 #undef capi_check
 #undef capi_logd
 
-#define capi_loge(fmt, ...) xcapilog("[LOGE] %s Ln %d " fmt " \n", __FILE__, __LINE__, ## __VA_ARGS__)
-#define capi_exit(fmt, ...) xcapiexit("[EXIT] %s Ln %d " fmt " \n", __FILE__, __LINE__, ## __VA_ARGS__)
-#define capi_utest(expr) ((expr) ? ((void)0) : xcapilog("[TEST] %s Ln %d (" #expr ") faild\n", __FILE__, __LINE__))
+#define capi_loge(fmt, ...) _capilog("[LOGE] %s Ln %d " fmt " \n", __FILE__, __LINE__, ## __VA_ARGS__)
+#define capi_exit(fmt, ...) _capiexit("[EXIT] %s Ln %d " fmt " \n", __FILE__, __LINE__, ## __VA_ARGS__)
+#define capi_utest(expr) ((expr) ? ((void)0) : _capilog("[TEST] %s Ln %d (" #expr ") faild\n", __FILE__, __LINE__))
 
 #if defined(CAPI_DEBUG)
-#define capi_check(expr) ((expr) ? ((void)0) : xcapiexit("[CHCK] %s Ln %d (" #expr "): faild\n", __FILE__, __LINE__))
-#define capi_logd(fmt, ...) xcapilog("[LOGD] %s Ln %d " fmt " \n", __FILE__, __LINE__, ## __VA_ARGS__)
+#define capi_check(expr) ((expr) ? ((void)0) : _capiexit("[CHCK] %s Ln %d (" #expr "): faild\n", __FILE__, __LINE__))
+#define capi_logd(fmt, ...) _capilog("[LOGD] %s Ln %d " fmt " \n", __FILE__, __LINE__, ## __VA_ARGS__)
 #else
 #define capi_check(expr)
 #define capi_logd(fmt, ...)
@@ -102,40 +102,52 @@ capidecl(const) tint tint_min = 0x8000000000000000;
 capidecl(inline) tbool ascii_ctrl(uint16 ch) { 
   return (((ch) >= 0x00 && (ch) <= 0x1F) || ((ch) == 0x7F)); 
 }
+
 capidecl(inline) tbool ascii_print(uint16 ch) { 
   return (((ch) >= 0x20 && (ch) <= 0x7E)); 
 }
+
 capidecl(inline) tbool ascii_punct(uint16 ch) { 
   return (((ch) >= 0x21 && (ch) <= 0x2F) || ((ch) >= 0x3A && (ch) <= 0x40) || 
           ((ch) >= 0x5B && (ch) <= 0x60) || ((ch) >= 0x7B && (ch) <= 0x7E)); 
 }
+
 capidecl(inline) tbool ascii_number(uint16 ch) { 
   return (((ch) >= 0x30 && (ch) <= 0x39)); 
-}  
+}
+
 capidecl(inline) tbool ascii_letter(uint16 ch) { 
   return (((ch) >= 0x41 && (ch) <= 0x5A) || ((ch) >= 0x61 && (ch) <= 0x7A)); 
 }
+
 capidecl(inline) tbool ascii_upper(uint16 ch) { 
   return (((ch) >= 0x41 && (ch) <= 0x5A)); 
-} 
+}
+
 capidecl(inline) tbool ascii_lower(uint16 ch) { 
   return (((ch) >= 0x61 && (ch) <= 0x7A)); 
 }
+
 capidecl(inline) tbool ascii_alphanum(uint16 ch) { 
   return (ascii_letter(ch) || ascii_number(ch)); 
 }
+
 capidecl(inline) tbool ascii_hexdigit(uint16 ch) { 
   return (ascii_number(ch) || ((ch) >= 0x41 && (ch) <= 0x46) || ((ch) >= 0x61 && (ch) <= 0x66)); 
 }
+
 capidecl(inline) tbool ascii_textfileend(uint16 ch) {
   return ((ch) == (uint16)KFileEnd || (ch) == 0); 
-} 
+}
+
 capidecl(inline) tbool ascii_textlineend(uint16 ch) { 
   return (ascii_textfileend(ch) || (ch) == KRet || (ch) == KNline); 
-} 
+}
+
 capidecl(inline) tbool ascii_noeolspace(uint16 ch) {
   return ((ch) == KTab || (ch) == KVtab || (ch) == KNpage || (ch) == KSpace);
 }
+
 capidecl(inline) tbool ascii_whitespace(uint16 ch) { 
   return (ascii_noeolspace(ch) || ascii_textlineend(ch)); 
 }
@@ -162,8 +174,8 @@ capidecl(export) tstr tstrn(void* start, tint n);
 
 capidecl(export) tbool is_little_endian(void);
 
-capidecl(export) void xcapilog(const char* fmt, ...);
-capidecl(export) void xcapiexit(const char* fmt, ...);
+capidecl(export) void _capilog(const char* fmt, ...);
+capidecl(export) void _capiexit(const char* fmt, ...);
 capidecl(export) void test_prefix(void);
 
 #endif /* BASE_PREFIX_H */
