@@ -51,9 +51,9 @@ if (expr) ABCD(); // unexpected, fine when modify to #define ABCD() do { foo(); 
 CALL(foo()) // expanded to: (f1(foo()), f2(foo()), but expected behavior may be `a=foo(), f1(a), f2(a)`
 ```
 
-**stringification #**
+**#**
 
-In function-like macros, a # operator before an identifier in the replacement-list 
+> In function-like macros, a # operator before an identifier in the replacement-list 
 runs the identifier through parameter replacement and encloses the result in quotes, 
 effectively creating a string literal. 
 In addition, the preprocessor adds backslashes to escape the quotes surrounding embedded string literals, if any, 
@@ -81,9 +81,9 @@ TOKEN_STRING(MAX_SIZE) // will produce "MAX_SIZE" not "64"
 showlist(1, "x", int); // expands to puts("1, \"x\", int")
 ```
 
-**token-pasting ##**
+**##**
 
-A ## operator between any two successive identifiers in the replacement-list 
+> A ## operator between any two successive identifiers in the replacement-list 
 runs parameter replacement on the two identifiers and then concatenates the result. 
 This operation is called "concatenation" or "token pasting". 
 Only tokens that form a valid token together may be pasted: 
@@ -94,7 +94,7 @@ If the result of concatenation is not a valid token, the behavior is undefined.
 The resulting token is available for further macro replacement. 
 The order of evaluation of ## operators is unspecified.
 
-Note: some compilers offer an extension that allows ## to appear after a comma and before \_\_VA_ARGS__, 
+> Note: some compilers offer an extension that allows ## to appear after a comma and before \_\_VA_ARGS__, 
 in which case the ## does nothing when \_\_VA_ARGS__ is non-empty, but removes the comma when \_\_VA_ARGS__ is empty: 
 this makes it possible to define macros such as `fprintf(stderr, format, ##__VA_ARGS__)`.
 
@@ -127,9 +127,9 @@ this makes it possible to define macros such as `fprintf(stderr, format, ##__VA_
 #define _VARGS_N_HELPER(a0, a1, a2, a3, a4, a5, N, ...) N
 ```
 
-6.10.3.1 Argument substitution
+> Argument substitution
 
-After the arguments for the invocation of a function-like macro have been identified, argument substitution takes place. 
+> After the arguments for the invocation of a function-like macro have been identified, argument substitution takes place. 
 A parameter in the replacement list, unless preceded by a # or ## preprocessing token 
 or followed by a ## preprocessing token, is replaced by the corresponding argument 
 after all macros contained therein have been expanded. 
