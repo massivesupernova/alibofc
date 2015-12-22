@@ -51,7 +51,7 @@ if (expr) ABCD(); // unexpected, fine when modify to #define ABCD() do { foo(); 
 CALL(foo()) // expanded to: (f1(foo()), f2(foo()), but expected behavior may be `a=foo(), f1(a), f2(a)`
 ```
 
-**#**
+**# (stringification)**
 
 > In function-like macros, a # operator before an identifier in the replacement-list 
 runs the identifier through parameter replacement and encloses the result in quotes, 
@@ -81,7 +81,7 @@ TOKEN_STRING(MAX_SIZE) // will produce "MAX_SIZE" not "64"
 showlist(1, "x", int); // expands to puts("1, \"x\", int")
 ```
 
-**##**
+**## (token pasting)**
 
 > A ## operator between any two successive identifiers in the replacement-list 
 runs parameter replacement on the two identifiers and then concatenates the result. 
