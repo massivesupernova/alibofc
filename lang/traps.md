@@ -41,7 +41,7 @@ void check(int i) {
   }
 }
 int main() {
-  // easy found that unsigned value of -100 is larger than 0x80000000, and 0x80000000 is large than 1 
+  // easy found that unsigned value of -5 is larger than 0x80000000, and 0x80000000 is large than 1 
   check(-5); check(1);
 }
 //0x00000000 -> (0x00000001) -> 0x7FFFFFFF  0x80000000 -> (0xFFFFFFB)   -> 0xFFFFFFFF
