@@ -76,3 +76,13 @@ for (a = 10; a >= 0; --a) {
   // do something according to `a`
 }
 ```
+
+# 条件陷阱
+
+注意负数的条件为真，非零整数的条件都为真
+```c
+int i = -1
+if (i) {
+  printf("%d is true\n", i);
+}
+```
