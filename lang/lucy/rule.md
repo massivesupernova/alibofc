@@ -30,9 +30,10 @@ Test.print() -> void {
   Print(self.size);
 }
 
-PrintTest() -> void {
+PrintTest() -> byte, byte {
   Test test;
   test.print();
+  return 1, 1;
 }
 ```
 
