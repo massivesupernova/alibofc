@@ -29,6 +29,11 @@ struct Test {
 Test.print() -> void {
   Print(self.size);
 }
+
+PrintTest() -> void {
+  Test test;
+  test.print();
+}
 ```
 
 # Member reference 
