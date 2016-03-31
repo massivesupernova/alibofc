@@ -20,29 +20,33 @@ x.f(y) if not found then try f(x,y)
 ```c
 space lucy.test;
 using lucy.core Print;
-using lucy.core Print Scanf;
+using lucy.core Scanf, Fopen;
 
-struct Test {
-  tint size;
-}
-
-Test.print() -> void {
-  Print(self.size);
-}
-
-PrintTest() -> byte, byte {
-  Test test;
-  test.print();
+PrintTest() byte, byte {
   return 1, 1;
 }
 
-using Func = (int, int) -> int;
+struct Test {
+  int size;
+}
 
-Test.create() -> int, Func {
+## const version
+Test@print() void {
+  Print(self.size);
+}
+
+## normal version
+Test.print() void {
+  Print(self.size);
+}
+
+using Func = (int, int) int;
+
+Test.create() int, Func {
   return 1, (x, y) { return x + y; };
 }
 
-Test.create(int a) -> int, Func {
+Test.create(int a) int, Func {
   return 2, [a](x, y) { return a + x + y; };
 }
 ```
@@ -50,4 +54,9 @@ Test.create(int a) -> int, Func {
 # Member reference 
 ```c
 pobj->m, obj.m => pobj.m, obj.m
+```
+
+# Uniform function type
+```c
+
 ```
