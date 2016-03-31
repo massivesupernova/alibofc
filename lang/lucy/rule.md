@@ -35,6 +35,16 @@ PrintTest() -> byte, byte {
   test.print();
   return 1, 1;
 }
+
+using Func = (int, int) -> int;
+
+Test.create() -> int, Func {
+  return 1, (x, y) { return x + y; };
+}
+
+Test.create(int a) -> int, Func {
+  return 2, [a](x, y) { return a + x + y; };
+}
 ```
 
 # Member reference 
