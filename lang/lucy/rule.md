@@ -30,12 +30,12 @@ struct Test {
   int size;
 }
 
-## const version
+// const version
 Test@print() void {
   Print(self.size);
 }
 
-## normal version
+// normal version
 Test.print() void {
   Print(self.size);
 }
