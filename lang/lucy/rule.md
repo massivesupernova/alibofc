@@ -22,6 +22,7 @@ space lucy.test;
 using lucy.core Print;
 using lucy.core Scanf, Fopen;
 
+[static]
 PrintTest() byte, byte {
   return 1, 1;
 }
