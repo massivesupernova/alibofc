@@ -22,16 +22,16 @@ space lucy.test;
 using lucy.core Print;
 using lucy.core Scanf, Fopen;
 
-'PrintTest() byte, byte {
+@PrintTest() byte, byte {
   return 1, 1;
 }
 
-'struct Test {
+struct @Test {
   int size;
 }
 
 // const version
-Test@print() void {
+Test:print() void {
   Print(self.size);
 }
 
@@ -46,7 +46,7 @@ Test.create() int, Func {
   return 1, (x, y) { return x + y; };
 }
 
-'Test.create(int a) int, Func {
+Test.@create(int a) int, Func {
   return 2, [a](x, y) { return a + x + y; };
 }
 ```
