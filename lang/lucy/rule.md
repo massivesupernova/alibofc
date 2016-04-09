@@ -19,8 +19,8 @@ x.f(y) if not found then try f(x,y)
 # Data and its method
 ```c
 space lucy.test;
-using lucy.core Print SCanf;
-using FileOpen = lucy.core.Fopen;
+using lucy.core.Print Scanf;
+using lucy.core.Fopen as FileOpen;
 
 @PrintTest() byte, byte {
   return 1, 1;
