@@ -52,7 +52,7 @@ Test.create() int, Func {
   return 1, (x, y) { return x + y; };
 }
 
-Test.@create(int a) int, Func {
+Test.@create(int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y; };
 }
 
