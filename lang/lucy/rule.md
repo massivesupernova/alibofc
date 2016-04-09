@@ -49,6 +49,10 @@ Test.create() int, Func {
 Test.@create(int a) int, Func {
   return 2, [a](x, y) { return a + x + y; };
 }
+
+Test:@create(inta, int b) {
+  return;
+}
 ```
 
 # Member reference 
