@@ -27,7 +27,7 @@ using lucy.core.Fopen as FileOpen;
 }
 
 struct @Test {
-  int size;
+  int size; // default init to 0
 }
 
 struct DefaultInit {
@@ -45,7 +45,7 @@ Test.print() void {
   Print(self.size);
 }
 
-using Func = (int, int) int;
+Func = (int, int) int;
 
 Test.create() int, Func {
   return 1, (x, y) { return x + y; };
