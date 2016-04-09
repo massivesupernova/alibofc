@@ -27,7 +27,8 @@ using lucy.core.Fopen as FileOpen;
 }
 
 struct @Test {
-  int size; // default init to 0
+  int size;       // default init to 0
+  int offset = ?; // need init it manually
 }
 
 struct DefaultInit {
