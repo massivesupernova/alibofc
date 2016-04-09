@@ -30,6 +30,11 @@ struct @Test {
   int size;
 }
 
+struct DefaultInit {
+  equal (int, int) byte = UserEqual;
+  int mask = 0xFFFF;
+}
+
 // const version
 Test:print() void {
   Print(self.size);
