@@ -50,7 +50,7 @@ Test.@create(int a) int, Func {
   return 2, [a](x, y) { return a + x + y; };
 }
 
-Test:@create(int:* a, int: b) {
+Test:@create(int:*: a, int: b) {
   return;
 }
 ```
