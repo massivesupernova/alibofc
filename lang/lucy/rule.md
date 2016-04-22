@@ -90,3 +90,18 @@ pobj->m, obj.m => pobj.m, obj.m
 ```c
 
 ```
+
+# Meta Programming
+```c
+// ... ..< ..=
+def sum(int...) int {
+  #if @args == 0
+    return 0;
+  #elif @args == 1
+    return @arg1;
+  #else
+    return @arg1 + sum(@arg2...);
+  #endif
+}
+```
+
