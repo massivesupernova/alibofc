@@ -22,9 +22,23 @@ space lucy.test;
 using lucy.core.Print Scanf;
 using lucy.core.Fopen as FileOpen;
 
-@PrintTest() byte, byte {
+// global prefix, multiple defines can be group in { and }
+// - space
+// - using
+// - def
+// - enum
+// - struct
+// - struct name
+
+def Func = (int, int) int;
+def a = 3;
+
+def @PrintTest() byte, byte {
   return 1, 1;
 }
+
+enum PI = 3.1415926;
+enum Color = Red, Yellow, Blue;
 
 struct @Test {
   int size;   // default init to 0
@@ -45,8 +59,6 @@ Test:print() void {
 Test.print() void {
   Print(self.size);
 }
-
-Func = (int, int) int;
 
 Test.create() int, Func {
   return 1, (x, y) { return x + y; };
