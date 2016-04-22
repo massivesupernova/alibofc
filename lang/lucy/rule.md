@@ -60,16 +60,24 @@ Test.print() void {
   Print(self.size);
 }
 
-Test.create() int, Func {
+Test.start() int, Func {
   return 1, (x, y) { return x + y; };
 }
 
-Test.@create(int a) int num, Func sum {
+Test.@start(int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y; };
 }
 
-Test:@create(uptr!int: a, int: b) {
+Test:@start(uptr!int: a, int: b) {
   return;
+}
+
+Test_create(int a, int b) {
+  return Test(1, 2);
+}
+
+Test_@create(int a, int b) {
+  return Test(1, 2);
 }
 ```
 
