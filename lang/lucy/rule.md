@@ -14,7 +14,7 @@ uint64 int64 - unsigned/signed 64-bit integer
 ```c
 f(x,y) if not found then try x.f(y)
 x.f(y) if not found then try f(x,y) 
-Test.print(t) will seek Test_print(Test:* test)
+Test.print(t) will seek Test::print(Test:* test)
 ```
 
 # Data and its method
@@ -73,11 +73,11 @@ Test:start(int:* a, int b) { @private
   return;
 }
 
-Test_create(int a, int b) {
+Test-create(int a, int b) {
   return Test(1, 2);
 }
 
-Test_create() { @private
+Test-create() { @private
   return Test.create(0, 1);
 }
 ```
