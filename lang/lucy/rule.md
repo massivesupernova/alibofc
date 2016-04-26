@@ -1,6 +1,7 @@
 
 # Primary Types
 ```c
+bool - true false
 char/utf8/utf16/utf32 - unsigned type
 byte/int8 - unsigned/signed 8-bit integer
 uint/int - unsigned/signed integer at least with pointer-size
@@ -20,7 +21,7 @@ postfix: 23ub  23b    8-bit
 user defined postfix: operator'kg(int a) int      56'kg + 32'pd
 
 int literal: 0b1101 0o775 0xFA 42   0b1101_1100 0xFFBB_FFFE 430_323_1234
-char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c'
+char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c
 unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
 ```
 
