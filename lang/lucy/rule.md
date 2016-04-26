@@ -54,33 +54,39 @@ def obj2 = new Child() as BaseClass;
 ```c
 f(x,y) if not found then try x.f(y)
 x.f(y) if not found then try f(x,y) 
-Test.print(t) will seek Test::print(Test:* test)
+Test.print(t) will seek Test|print(Test: test)
 ```
 
 # Data and its method
 ```c
 space lucy.test;
-using lucy.core.Print, Scanf;
-using lucy.core.Fopen as FileOpen, Fclose as FileClose;
+using lucy.core.Print, Scanf; //只需要导入struct/class名称，文件作用域内的全局变量名、函数名、常量名、函数类型名称
+using lucy.base.Fopen as FileOpen, Fclose as FileClose, Fread as BaseFileRead;
+using lucy.stream.*; //提示所有同名标识符
 
 // possible global prefix, multiple defines can be group in { and }
 // - space
 // - using
-// - typedef
+// - ftype
 // - def
 // - enum
 // - struct
-// - struct name
 // - class
+// - |
+// - struct name
 // - class name
 
-typedef Func = (int, int) int;
+ftype Func = (int, int) int;
 
-def a = 3;
+|printTest = (int a) byte {
+  return byte(a);
+}
 
-def _printTest = () byte, byte {
+|_printTest = () byte, byte {
   return 1, 1;
 }
+
+def a = 3;
 
 enum PI = 3.1415926;
 enum Color = Red 3, Yellow, Blue;
@@ -91,10 +97,7 @@ struct _Test {
 } 
 
 struct DefaultInit {
-  typedef {
-    Equlal = (int, int) byte;
-  }
-  
+  ftype Equal = (int, int) byte;
   Equal equal = UserEqual; // member is private
   int mask = 0xFFFF;       // member is private
 }
@@ -125,7 +128,7 @@ Test._start(int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y; };
 }
 
-Test:_start(int:* a, int b) {
+Test:_start(int a, int b) {
   return;
 }
 
