@@ -88,6 +88,20 @@ ftype Func = (int, int) int;
 
 def a = 3;
 
+def {
+  aa = 3s;
+  bb = 4LL;
+  cc = 23.0;
+}
+
+def:float f1 = 23;
+
+def:float {
+  fa = 234;
+  fb = 232;
+  fc = 231;
+}
+
 enum PI = 3.1415926;
 enum Color = Red 3, Yellow, Blue;
 
@@ -148,7 +162,10 @@ pobj->m, obj.m => pobj.m, obj.m
 
 # Uniform function type
 ```c
-
+ftype AddFunc = (int, int) int;
+def:AddFunc accu = (x, y) { return x + y; };
+def a = 2;
+def:AddFunc acc2 = [a](x, y) { return a + x + y; };
 ```
 
 # Meta Programming
