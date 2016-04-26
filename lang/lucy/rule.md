@@ -77,8 +77,8 @@ Test_create(int a, int b) {
   return Test(1, 2);
 }
 
-Test_create(int a, int b) { @private
-  return Test(1, 2);
+Test_create() { @private
+  return Test.create(0, 1);
 }
 ```
 
