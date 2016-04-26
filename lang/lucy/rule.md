@@ -63,18 +63,22 @@ space lucy.test;
 using lucy.core.Print Scanf;
 using lucy.core.Fopen as FileOpen;
 
-// global prefix, multiple defines can be group in { and }
+// possible global prefix, multiple defines can be group in { and }
 // - space
 // - using
+// - typedef
 // - def
 // - enum
 // - struct
 // - struct name
+// - class
+// - class name
 
 typedef Func = (int, int) int;
 
 def a = 3;
-def _PrintTest() byte, byte {
+
+def _printTest = () byte, byte {
   return 1, 1;
 }
 
@@ -125,11 +129,11 @@ Test:_start(int:* a, int b) {
   return;
 }
 
-Test-create(int a, int b) {
+Test|create(int a, int b) {
   return Test(1, 2);
 }
 
-Test-_create() {
+Test|_create() {
   return Test.create(0, 1);
 }
 ```
