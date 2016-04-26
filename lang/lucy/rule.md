@@ -18,7 +18,7 @@ postfix: 23ub  23b    8-bit
 
 user defined postfix: operator'kg(int a) int      56'kg + 32'pd
 
-int literal: 0b1101 0o775 0xFA 42
+int literal: 0b1101 0o775 0xFA 42   0b1101_1100 0xFFBB_FFFE 430_323_1234
 ```
 
 # Standard Container
