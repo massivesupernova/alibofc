@@ -1,7 +1,7 @@
 
 # Primary Types
 ```c
-char/utf8/utf16/utf32
+char/utf8/utf16/utf32 - unsigned type
 byte/int8 - unsigned/signed 8-bit integer
 uint/int - unsigned/signed integer at least with pointer-size
 uptr      - uint
