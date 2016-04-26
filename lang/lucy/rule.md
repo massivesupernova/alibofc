@@ -69,25 +69,33 @@ using lucy.core.Fopen as FileOpen;
 typedef Func = (int, int) int;
 
 def a = 3;
-def PrintTest() byte, byte { @restrict to lucy.test.TypeTest
+def _PrintTest() byte, byte {
   return 1, 1;
 }
 
 enum PI = 3.1415926;
 enum Color = Red 3, Yellow, Blue;
 
-struct Test { @private
+struct _Test {
   int size;   // default init to 0
   int offset? // need init it manually
-}
+} 
 
 struct DefaultInit {
   typedef {
     Equlal = (int, int) byte;
   }
   
-  Equal equal = UserEqual;
-  int mask = 0xFFFF;
+  Equal equal = UserEqual; // member is private
+  int mask = 0xFFFF;       // member is private
+}
+
+Test.setter {
+
+}
+
+Test.getter {
+
 }
 
 // const version
@@ -104,11 +112,11 @@ Test.start() int, Func {
   return 1, (x, y) { return x + y; };
 }
 
-Test.start(int a) int num, Func sum { @private
+Test._start(int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y; };
 }
 
-Test:start(int:* a, int b) { @private
+Test:_start(int:* a, int b) {
   return;
 }
 
@@ -116,7 +124,7 @@ Test-create(int a, int b) {
   return Test(1, 2);
 }
 
-Test-create() { @private
+Test-_create() {
   return Test.create(0, 1);
 }
 ```
