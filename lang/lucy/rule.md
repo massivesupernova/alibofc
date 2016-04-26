@@ -47,7 +47,8 @@ struct Test { @private
 }
 
 struct DefaultInit {
-  equal (int, int) byte = UserEqual;
+  def Equal = (int, int) byte;
+  Equal equal = UserEqual;
   int mask = 0xFFFF;
 }
 
