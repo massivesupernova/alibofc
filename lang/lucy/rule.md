@@ -14,6 +14,7 @@ uint64 int64 - unsigned/signed 64-bit integer
 ```c
 f(x,y) if not found then try x.f(y)
 x.f(y) if not found then try f(x,y) 
+Test.print(t) will seek Test_print(Test test)
 ```
 
 # Data and its method
@@ -33,14 +34,14 @@ using lucy.core.Fopen as FileOpen;
 def Func = (int, int) int;
 def a = 3;
 
-def @PrintTest() byte, byte {
+def PrintTest() byte, byte { @restrict to lucy.test.TypeTest
   return 1, 1;
 }
 
 enum PI = 3.1415926;
 enum Color = Red, Yellow, Blue;
 
-struct @Test {
+struct Test { @private
   int size;   // default init to 0
   int offset? // need init it manually
 }
@@ -64,11 +65,11 @@ Test.start() int, Func {
   return 1, (x, y) { return x + y; };
 }
 
-Test.@start(int a) int num, Func sum {
+Test.start(int a) int num, Func sum { @private
   return 2, [a](x, y) { return a + x + y; };
 }
 
-Test:@start(uptr!int: a, int: b) {
+Test:start(uptr!int: a, int: b) { @private
   return;
 }
 
@@ -76,7 +77,7 @@ Test_create(int a, int b) {
   return Test(1, 2);
 }
 
-Test_@create(int a, int b) {
+Test_create(int a, int b) { @private
   return Test(1, 2);
 }
 ```
