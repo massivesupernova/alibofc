@@ -69,11 +69,9 @@ using lucy.stream.*; //提示所有同名标识符
 // - using
 // - ftype
 // - def
-// - enum
-// - struct
+// - const
 // - class
 // - |
-// - struct name
 // - class name
 
 ftype Func = (int, int) int;
@@ -97,20 +95,32 @@ def {
 def:float f1 = 23;
 
 def:float {
-  fa = 234;
-  fb = 232;
-  fc = 231;
+  fa = 234;  //compile error
+  fb = 232;  //compile error
+  fc = 231f; // ok
 }
 
-enum PI = 3.1415926;
-enum Color = Red 3, Yellow, Blue;
+const PI = 3.1415926;
+const {
+  MaxSize = 128;
+  Tag = "abcd";
+  GoldenSeq = [1, 3, 5, 7];
+  Color: Red = 3LL, Yellow, Blue;
+}
+const:byte {
+  B1 = 23;  // compile error
+  B2 = 23b; // fine
+  Color2: Red, Yellow, Blue;      // compile error
+  Color3: Red = 0b, Yellow, Blue; // fine
+}
+const Color4: Red = 3, Yellow, Blue; // enum no need to use form - const:type
 
-struct _Test {
+class _Test {
   int size;   // default init to 0
   int offset? // need init it manually
 } 
 
-struct DefaultInit {
+class DefaultInit {
   ftype Equal = (int, int) byte;
   Equal equal = UserEqual; // member is private
   int mask = 0xFFFF;       // member is private
