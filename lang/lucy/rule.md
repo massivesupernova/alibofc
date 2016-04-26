@@ -60,8 +60,8 @@ Test.print(t) will seek Test::print(Test:* test)
 # Data and its method
 ```c
 space lucy.test;
-using lucy.core.Print Scanf;
-using lucy.core.Fopen as FileOpen;
+using lucy.core.Print, Scanf;
+using lucy.core.Fopen as FileOpen, Fclose as FileClose;
 
 // possible global prefix, multiple defines can be group in { and }
 // - space
