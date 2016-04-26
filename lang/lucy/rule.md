@@ -3,11 +3,42 @@
 ```c
 byte/int8 - unsigned/signed 8-bit integer
 uint/int - unsigned/signed integer at least with pointer-size
-real      - double float pointer number
 uptr      - uint
 uint16 int16 - unsigned/signed 16-bit integer
 uint32 int32 - unsigned/signed 32-bit integer
 uint64 int64 - unsigned/signed 64-bit integer
+float/double
+
+postfix: 23ub  23b    8-bit
+         23ui  23     machine word size
+         23us  23s    16-bit
+         23ul  23L    32-bit
+         23ull 23LL   64-bit
+         23f   23.0   float double
+
+user defined postfix: operator'kg(int a) int      56'kg + 32'pd
+
+int literal: 0b1101 0o775 0xFA 42
+```
+
+# Standard Container
+```c
+string: "abcd"
+array: [23, 46, 72,]
+table: [23:"abcd", 42:"def"]
+set: { 1, 2, 3, 4, 5}
+
+// call function that has only one argument with string/array/table/set type:
+Test.print(string s) void { /* ... */ }
+Test.print({int} a) void { /* ... */ }
+Test.print([int] a) void { /* ... */ }
+Test.print([int:string] t) void { /* ... */ }
+
+Test test;
+test.print"abcd";
+test.print{1, 2, 3,};
+test.print[23, 12,];
+test.print[12:"a", 23:"b"];
 ```
 
 # Uniform call syntex
@@ -31,9 +62,9 @@ using lucy.core.Fopen as FileOpen;
 // - struct
 // - struct name
 
-def Func = (int, int) int;
-def a = 3;
+typedef Func = (int, int) int;
 
+def a = 3;
 def PrintTest() byte, byte { @restrict to lucy.test.TypeTest
   return 1, 1;
 }
@@ -47,7 +78,7 @@ struct Test { @private
 }
 
 struct DefaultInit {
-  def {
+  typedef {
     Equlal = (int, int) byte;
   }
   
