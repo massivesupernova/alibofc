@@ -95,9 +95,9 @@ def {
 def:float f1 = 23;
 
 def:float {
-  fa = 234;  //compile error
-  fb = 232;  //compile error
-  fc = 231f; // ok
+  fa = 234;
+  fb = 232;
+  fc = 231f;
 }
 
 const PI = 3.1415926;
@@ -108,10 +108,9 @@ const {
   Color: Red = 3LL, Yellow, Blue;
 }
 const:byte {
-  B1 = 23;  // compile error
-  B2 = 23b; // fine
-  Color2: Red, Yellow, Blue;      // compile error
-  Color3: Red = 0b, Yellow, Blue; // fine
+  B1 = 23;
+  B2 = 23b;
+  Color2: Red, Yellow, Blue;
 }
 const Color4: Red = 3, Yellow, Blue; // enum no need to use form - const:type
 
