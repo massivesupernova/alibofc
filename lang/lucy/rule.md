@@ -39,7 +39,7 @@ def PrintTest() byte, byte { @restrict to lucy.test.TypeTest
 }
 
 enum PI = 3.1415926;
-enum Color = Red, Yellow, Blue;
+enum Color = Red 3, Yellow, Blue;
 
 struct Test { @private
   int size;   // default init to 0
@@ -47,7 +47,10 @@ struct Test { @private
 }
 
 struct DefaultInit {
-  def Equal = (int, int) byte;
+  def {
+    Equlal = (int, int) byte;
+  }
+  
   Equal equal = UserEqual;
   int mask = 0xFFFF;
 }
