@@ -40,11 +40,14 @@ Test.print({int} a) void { /* ... */ }
 Test.print([int] a) void { /* ... */ }
 Test.print([int:string] t) void { /* ... */ }
 
-Test test;
+def test = Test();
 test.print"abcd";
 test.print{1, 2, 3,};
 test.print[23, 12,];
 test.print[12:"a", 23:"b"];
+
+def obj = new ClassTest();
+def obj2 = new Child() as BaseClass;
 ```
 
 # Uniform call syntex
