@@ -105,14 +105,14 @@ func _printTest() byte, byte {
 }
 
 // func:Func形式与等号一起使用
-func:Func addFunc = (a, b) {
+var:Func addFunc = (a, b) {
   return a + b
 }
 var x = 3
-func:Func addFunc2 = [x](a, b) {
+var:Func addFunc2 = [x](a, b) {
   return x + a + b
 }
-func:Func addFunc3 = addFunc
+var:Func addFunc3 = addFunc
 
 var a = 3
 var aa = 3s
@@ -143,6 +143,7 @@ enum:byte Color2 {
   Blue,
 }
 
+//数据成员、参数声明列表使用Type name形式
 class _Test {
   int size   // default init to 0
   int offset? // need init it manually
