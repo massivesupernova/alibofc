@@ -27,7 +27,7 @@ unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
 ???如何尽量消除指针
 
 基本语法规则：
-- {}中包含的是语句用分号分割
+- ()和[]中元素用逗号分割，{}中包含的是语句用分号分割
 ```
 
 # Standard Container
@@ -37,15 +37,15 @@ array: [23, 46, 72,]
 table: [23:"abcd", 42:"def"]
 set: [^1, 2, 3]
 
-var a1 = [int];                       // empty array
+var a1 = [int];                   // empty array
 var a2 = [int].(size=3,value=0);  // array with 3 elements
 var a3 = [1, 2, 3];
 
-var t1 = [int:string];                // empty table
+var t1 = [int:string];            // empty table
 var t2 = [int:string].(size=128); // table with 128 elements space
 var t3 = [1:"a", 2:"b"];
 
-var s1 = [^int];                   // empty set
+var s1 = [^int];               // empty set
 var s2 = [^int].(4);           // set with 5 elements space
 var s3 = [^3, 6, 9];
 
