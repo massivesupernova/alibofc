@@ -37,6 +37,9 @@ array: [23, 46, 72,]
 table: [23:"abcd", 42:"def"]
 set: [|1, 2, 3]
 
+var a = 3.0;
+var str = "double =\(a)";
+
 var a1 = [int];                   // empty array
 var a2 = [int].(size=3,value=0);  // array with 3 elements
 var a3 = [1, 2, 3];
