@@ -71,17 +71,20 @@ using lucy.stream.*; //提示所有同名标识符
 // - def
 // - const
 // - class
-// - |
 // - class name
 
 ftype Func = (int, int) int;
 
-|printTest = (int a) byte {
+def printTest = (int a) byte {
   return byte(a);
 }
 
-|_printTest = () byte, byte {
+def _printTest = () byte, byte {
   return 1, 1;
+}
+
+def:Func aFunc = (a, b) { 
+  return a + b;
 }
 
 def a = 3;
