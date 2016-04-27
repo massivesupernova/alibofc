@@ -1,5 +1,7 @@
 
-# Primary Types
+- https://developer.apple.com/swift/
+
+## Primary Types
 ```c
 bool - true false
 char/utf8/utf16/utf32 - unsigned type
@@ -30,7 +32,7 @@ unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
 - ()和[]中元素用逗号分割，{}中包含的是语句用分号分割
 ```
 
-# Standard Container
+## Standard Container
 ```c
 string: "abcd"
 array: [23, 46, 72,]
@@ -68,14 +70,14 @@ var obj = new ClassTest();
 var obj2 = new Child() as BaseClass;
 ```
 
-# Uniform call syntex
+## Uniform call syntex
 ```c
 f(x,y) if not found then try x.f(y)
 x.f(y) if not found then try f(x,y) 
 Test.print(t) will seek Test|print(Test: test)
 ```
 
-# Data and its method
+## Data and its method
 ```c
 space lucy.test;
 using lucy.core.Print, Scanf; //只需要导入struct/class名称，文件作用域内的全局变量名、函数名、常量名、函数类型名称
@@ -194,12 +196,12 @@ func Test._create() {
 
 ```
 
-# Member reference 
+## Member reference 
 ```c
 pobj->m, obj.m => pobj.m, obj.m
 ```
 
-# Uniform function type
+## Uniform function type
 ```c
 ftype AddFunc = (int, int) int;
 var:AddFunc accu = (x, y) { return x + y; };
@@ -207,7 +209,7 @@ var a = 2;
 var:AddFunc acc2 = [a](x, y) { return a + x + y; };
 ```
 
-# 不定长参数
+## 不定长参数
 ```c
 // ... ..< ..=
 var sum = (int... args) int { 
@@ -219,7 +221,7 @@ var sum = (int... args) int {
 }
 ```
 
-# Meta Programming
+## Meta Programming
 
 ```c
 ```
