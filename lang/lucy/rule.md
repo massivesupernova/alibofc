@@ -87,6 +87,11 @@ def:Func aFunc = (a, b) {
   return a + b;
 }
 
+def x = 3;
+def:Func bFunc = [x](a, b) {
+  return x + a + b;
+}
+
 def a = 3;
 
 def {
