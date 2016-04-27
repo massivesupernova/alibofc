@@ -40,14 +40,14 @@ Test.print({int} a) void { /* ... */ }
 Test.print([int] a) void { /* ... */ }
 Test.print([int:string] t) void { /* ... */ }
 
-def test = Test();
+var test = Test();
 test.print"abcd";
 test.print{1, 2, 3,};
 test.print[23, 12,];
 test.print[12:"a", 23:"b"];
 
-def obj = new ClassTest();
-def obj2 = new Child() as BaseClass;
+var obj = new ClassTest();
+var obj2 = new Child() as BaseClass;
 ```
 
 # Uniform call syntex
@@ -68,42 +68,42 @@ using lucy.stream.*; //提示所有同名标识符
 // - space
 // - using
 // - ftype
-// - def
+// - var
 // - const
 // - class
 // - class name
 
 ftype Func = (int, int) int;
 
-def printTest = (int a) byte {
+var printTest = (int a) byte {
   return byte(a);
 }
 
-def _printTest = () byte, byte {
+var _printTest = () byte, byte {
   return 1, 1;
 }
 
-def:Func aFunc = (a, b) { 
+var:Func aFunc = (a, b) { 
   return a + b;
 }
 
-def x = 3;
-def:Func bFunc = [x](a, b) {
+var x = 3;
+var:Func bFunc = [x](a, b) {
   return x + a + b;
 }
-def:Func cFunc = bFunc;
+var:Func cFunc = bFunc;
 
-def a = 3;
+var a = 3;
 
-def {
+var {
   aa = 3s;
   bb = 4LL;
   cc = 23.0;
 }
 
-def:float f1 = 23;
+var:float f1 = 23;
 
-def:float {
+var:float {
   fa = 234;
   fb = 232;
   fc = 231f;
@@ -181,15 +181,15 @@ pobj->m, obj.m => pobj.m, obj.m
 # Uniform function type
 ```c
 ftype AddFunc = (int, int) int;
-def:AddFunc accu = (x, y) { return x + y; };
-def a = 2;
-def:AddFunc acc2 = [a](x, y) { return a + x + y; };
+var:AddFunc accu = (x, y) { return x + y; };
+var a = 2;
+var:AddFunc acc2 = [a](x, y) { return a + x + y; };
 ```
 
 # Meta Programming
 ```c
 // ... ..< ..=
-def sum(int...) int {
+var sum = (int...) int {
   #if @args == 0
     return 0;
   #elif @args == 1
