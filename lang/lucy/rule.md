@@ -91,6 +91,7 @@ def x = 3;
 def:Func bFunc = [x](a, b) {
   return x + a + b;
 }
+def:Func cFunc = bFunc;
 
 def a = 3;
 
