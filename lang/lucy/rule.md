@@ -25,6 +25,9 @@ char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c
 unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
 
 ???如何尽量消除指针
+
+基本语法规则：
+- {}中包含的是语句用分号分割
 ```
 
 # Standard Container
@@ -32,17 +35,29 @@ unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
 string: "abcd"
 array: [23, 46, 72,]
 table: [23:"abcd", 42:"def"]
-set: { 1, 2, 3, 4, 5}
+set: [^1, 2, 3]
+
+var a1 = [int];                       // empty array
+var a2 = [int].(size=3,value=0);  // array with 3 elements
+var a3 = [1, 2, 3];
+
+var t1 = [int:string];                // empty table
+var t2 = [int:string].(size=128); // table with 128 elements space
+var t3 = [1:"a", 2:"b"];
+
+var s1 = [^int];                   // empty set
+var s2 = [^int].(4);           // set with 5 elements space
+var s3 = [^3, 6, 9];
 
 // call function that has only one argument with string/array/table/set type:
 Test.print(string s) void { /* ... */ }
-Test.print({int} a) void { /* ... */ }
+Test.print([^int] a) void { /* ... */ }
 Test.print([int] a) void { /* ... */ }
 Test.print([int:string] t) void { /* ... */ }
 
 var test = Test();
 test.print"abcd";
-test.print{1, 2, 3,};
+test.print[^1, 2, 3];
 test.print[23, 12,];
 test.print[12:"a", 23:"b"];
 
@@ -171,6 +186,7 @@ Test|create(int a, int b) {
 Test|_create() {
   return Test.create(0, 1);
 }
+
 ```
 
 # Member reference 
