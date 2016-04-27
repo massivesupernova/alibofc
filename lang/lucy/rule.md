@@ -85,31 +85,31 @@ using lucy.stream.*; //提示所有同名标识符
 // possible global prefix, multiple defines can be group in { and }
 // - space
 // - using
-// - ftype
+// - typedef
 // - var
+// - func
 // - const
 // - class
-// - class name
 
-ftype Func = (int, int) int;
+typedef Func = (int, int) int;
 
-var printTest = (int a) byte {
+func printTest(int a) byte {
   return byte(a);
 }
 
-var _printTest = () byte, byte {
+func _printTest() byte, byte {
   return 1, 1;
 }
 
-var:Func aFunc = (a, b) { 
+// func:Func形式与等号一起使用
+func:Func addFunc = (a, b) {
   return a + b;
 }
-
 var x = 3;
-var:Func bFunc = [x](a, b) {
+func:Func addFunc2 = [x](a, b) {
   return x + a + b;
 }
-var:Func cFunc = bFunc;
+func:Func addFunc3 = addFunc;
 
 var a = 3;
 
@@ -132,14 +132,14 @@ const {
   MaxSize = 128;
   Tag = "abcd";
   GoldenSeq = [1, 3, 5, 7];
-  Color: Red = 3LL, Yellow, Blue;
+  Color: Red 3LL, Yellow, Blue;
 }
 const:byte {
   B1 = 23;
   B2 = 23b;
   Color2: Red, Yellow, Blue;
 }
-const Color4: Red = 3, Yellow, Blue; // enum no need to use form - const:type
+const Color4: Red 3, Yellow, Blue; // enum no need to use form - const:type
 
 class _Test {
   int size;   // default init to 0
@@ -147,46 +147,48 @@ class _Test {
 } 
 
 class DefaultInit {
-  ftype Equal = (int, int) byte;
+  typedef Equal = (int, int) byte;
   Equal equal = UserEqual; // member is private
   int mask = 0xFFFF;       // member is private
 }
 
-Test.setter {
+func setter(Test) {
 
 }
 
-Test.getter {
+func getter(Test) {
 
 }
 
 // const version
-Test:print() void {
-  Print(self.size);
+func print(Test) void {
+  Print(.size);
 }
 
-// normal version
-Test.print() void {
-  Print(self.size);
+// mutable version
+func print(var:Test) void {
+  Print(.size);
 }
 
-Test.start() int, Func {
+func start(Test) int, Func {
   return 1, (x, y) { return x + y; };
 }
 
-Test._start(int a) int num, Func sum {
+func _start(Test, int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y; };
 }
 
-Test:_start(int a, int b) {
+func _start(var:Test, int a, int b) {
   return;
 }
 
-Test|create(int a, int b) {
+// Class static functions
+
+func Test.create(int a, int b) {
   return Test(1, 2);
 }
 
-Test|_create() {
+func Test._create() {
   return Test.create(0, 1);
 }
 
@@ -205,17 +207,19 @@ var a = 2;
 var:AddFunc acc2 = [a](x, y) { return a + x + y; };
 ```
 
-# Meta Programming
+# 不定长参数
 ```c
 // ... ..< ..=
-var sum = (int...) int {
-  #if @args == 0
-    return 0;
-  #elif @args == 1
-    return @arg1;
-  #else
-    return @arg1 + sum(@arg2...);
-  #endif
+var sum = (int... args) int { 
+  var total = 0;
+  for (elem in args) {
+    total += args;
+  }
+  return total;
 }
 ```
 
+# Meta Programming
+
+```c
+```
