@@ -39,20 +39,20 @@ array: [23, 46, 72,]
 table: [23:"abcd", 42:"def"]
 set: [|1, 2, 3]
 
-var a = 3.0;
-var str = "double =\(a)";
+var a = 3.0
+var str = "double =\(a)"
 
-var a1 = [int];                   // empty array
-var a2 = [int].(size=3,value=0);  // array with 3 elements
-var a3 = [1, 2, 3];
+var a1 = [int]                   // empty array
+var a2 = [int].(size=3,value=0)  // array with 3 elements
+var a3 = [1, 2, 3]
 
-var t1 = [int:string];            // empty table
-var t2 = [int:string].(size=128); // table with 128 elements space
-var t3 = [1:"a", 2:"b"];
+var t1 = [int:string]            // empty table
+var t2 = [int:string].(size=128) // table with 128 elements space
+var t3 = [1:"a", 2:"b"]
 
-var s1 = [|int];               // empty set
-var s2 = [|int].(4);           // set with 5 elements space
-var s3 = [|3, 6, 9];
+var s1 = [|int]               // empty set
+var s2 = [|int].(4)           // set with 5 elements space
+var s3 = [|3, 6, 9]
 
 // call function that has only one argument with string/array/table/set type:
 Test.print(string s) void { /* ... */ }
@@ -60,14 +60,14 @@ Test.print([|int] a) void { /* ... */ }
 Test.print([int] a) void { /* ... */ }
 Test.print([int:string] t) void { /* ... */ }
 
-var test = Test();
-test.print"abcd";
-test.print[|1, 2, 3];
-test.print[23, 12,];
-test.print[12:"a", 23:"b"];
+var test = Test()
+test.print"abcd"
+test.print[|1, 2, 3]
+test.print[23, 12,]
+test.print[12:"a", 23:"b"]
 
-var obj = new ClassTest();
-var obj2 = new Child() as BaseClass;
+var obj = new ClassTest()
+var obj2 = new Child() as BaseClass
 ```
 
 ## Uniform call syntex
@@ -79,10 +79,10 @@ Test.print(t) will seek Test|print(Test: test)
 
 ## Data and its method
 ```c
-space lucy.test;
-using lucy.core.Print, Scanf; //只需要导入struct/class名称，文件作用域内的全局变量名、函数名、常量名、函数类型名称
-using lucy.base.Fopen as FileOpen, Fclose as FileClose, Fread as BaseFileRead;
-using lucy.stream.*; //提示所有同名标识符
+space lucy.test
+using lucy.core.Print, Scanf //只需要导入struct/class名称，文件作用域内的全局变量名、函数名、常量名、函数类型名称
+using lucy.base.Fopen as FileOpen, Fclose as FileClose, Fread as BaseFileRead
+using lucy.stream.* //提示所有同名标识符，using只能占用一行
 
 // possible global prefix, multiple defines can be group in { and }
 // - space
@@ -90,68 +90,68 @@ using lucy.stream.*; //提示所有同名标识符
 // - typedef
 // - var
 // - func
+// - enum
 // - const
 // - class
 
-typedef Func = (int, int) int;
+typedef Func = (int, int) int
 
 func printTest(int a) byte {
-  return byte(a);
+  return byte(a)
 }
 
 func _printTest() byte, byte {
-  return 1, 1;
+  return 1, 1
 }
 
 // func:Func形式与等号一起使用
 func:Func addFunc = (a, b) {
-  return a + b;
+  return a + b
 }
-var x = 3;
+var x = 3
 func:Func addFunc2 = [x](a, b) {
-  return x + a + b;
+  return x + a + b
 }
-func:Func addFunc3 = addFunc;
+func:Func addFunc3 = addFunc
 
-var a = 3;
+var a = 3
+var aa = 3s
+var bb = 4LL
+var cc = 23.0
 
-var {
-  aa = 3s;
-  bb = 4LL;
-  cc = 23.0;
+var:float f1 = 23
+var:float fa = 234
+var:float fb = 232
+var fc = 231f
+
+const PI = 3.1415926
+const MaxSize = 128
+const Tag = "abcd"
+const GoldenSeq = [1, 3, 5, 7]
+const:byte B1 = 23
+cosnt:byte B2 = 23b
+
+enum Color {
+  Red 3LL, 
+  Yellow, 
+  Blue
 }
 
-var:float f1 = 23;
-
-var:float {
-  fa = 234;
-  fb = 232;
-  fc = 231f;
+enum:byte Color2 {
+  Red 3,
+  Yellow,
+  Blue,
 }
-
-const PI = 3.1415926;
-const {
-  MaxSize = 128;
-  Tag = "abcd";
-  GoldenSeq = [1, 3, 5, 7];
-  Color: Red 3LL, Yellow, Blue;
-}
-const:byte {
-  B1 = 23;
-  B2 = 23b;
-  Color2: Red, Yellow, Blue;
-}
-const Color4: Red 3, Yellow, Blue; // enum no need to use form - const:type
 
 class _Test {
-  int size;   // default init to 0
+  int size   // default init to 0
   int offset? // need init it manually
 } 
 
 class DefaultInit {
-  typedef Equal = (int, int) byte;
-  Equal equal = UserEqual; // member is private
-  int mask = 0xFFFF;       // member is private
+  typedef Equal = (int, int) byte
+  Equal equal = UserEqual // member is private
+  int mask = 0xFFFF       // member is private
 }
 
 func setter(Test) {
@@ -164,34 +164,34 @@ func getter(Test) {
 
 // const version
 func print(Test) void {
-  Print(.size);
+  Print(.size)
 }
 
 // mutable version
 func print(var:Test) void {
-  Print(.size);
+  Print(.size)
 }
 
 func start(Test) int, Func {
-  return 1, (x, y) { return x + y; };
+  return 1, (x, y) { return x + y }
 }
 
 func _start(Test, int a) int num, Func sum {
-  return 2, [a](x, y) { return a + x + y; };
+  return 2, [a](x, y) { return a + x + y }
 }
 
 func _start(var:Test, int a, int b) {
-  return;
+  return
 }
 
 // Class static functions
 
 func Test.create(int a, int b) {
-  return Test(1, 2);
+  return Test(1, 2)
 }
 
 func Test._create() {
-  return Test.create(0, 1);
+  return Test.create(0, 1)
 }
 
 ```
@@ -201,23 +201,15 @@ func Test._create() {
 pobj->m, obj.m => pobj.m, obj.m
 ```
 
-## Uniform function type
-```c
-ftype AddFunc = (int, int) int;
-var:AddFunc accu = (x, y) { return x + y; };
-var a = 2;
-var:AddFunc acc2 = [a](x, y) { return a + x + y; };
-```
-
 ## 不定长参数
 ```c
 // ... ..< ..=
-var sum = (int... args) int { 
-  var total = 0;
+func sum(int... args) int { 
+  var total = 0
   for (elem in args) {
-    total += args;
+    total += args
   }
-  return total;
+  return total
 }
 ```
 
