@@ -144,7 +144,7 @@ struct/class作用域 {
     a = 3 // ok, does't affect outside value
   }
 
-  func modify(var& int a) { //在C实现中传指针
+  func modify(var int& a) { //&只能用来修饰值类型，在C实现中传指针
     a = 3 // ok, affect outside value
   }
 }
