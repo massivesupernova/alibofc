@@ -29,9 +29,6 @@ char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c
 unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
 
 ???如何尽量消除指针
-
-基本语法规则：
-- ()和[]中元素用逗号分割，{}中包含的是语句用分号分割
 ```
 
 ## Standard Container
