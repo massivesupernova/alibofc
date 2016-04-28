@@ -311,13 +311,13 @@ func _start(Test, int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y }
 }
 
-func _start(var Test, int a, int b) {
+func _start(var Test, int a, b) {
   return
 }
 
 // Class static functions
 
-func Test.create(int a, int b) {
+func Test.create(int a, b) {
   return Test(1, 2)
 }
 
