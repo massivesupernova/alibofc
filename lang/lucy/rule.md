@@ -55,7 +55,7 @@ var s1 = [|int]               // empty set
 var s2 = [|int].(4)           // set with 5 elements space
 var s3 = [|3, 6, 9]
 
-func init(int size, value) void | size.elems.count.num { 
+func initIntArray(int size, value) void | size.elems.count.num { 
   /* ... */
 }
 
@@ -284,7 +284,7 @@ class _Test {
   var offset = int? // need init it manually
 } 
 
-class DefaultInit {
+class DefaultInit: Base {
   var equal = UserEqual // member is private
   var mask = 0xFFFF     // member is private
 }
@@ -307,7 +307,7 @@ func print(var Test) void {
   Print(.size)
 }
 
-func start(Test) int, Func {
+func @override start(Test) int, Func {
   return 1, (x, y) { return x + y }
 }
 
