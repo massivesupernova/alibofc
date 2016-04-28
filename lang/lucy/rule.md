@@ -3,6 +3,7 @@
 
 ## Primary Types
 ```c
+void
 bool - true false
 char/utf8/utf16/utf32 - unsigned type
 byte/int8 - unsigned/signed 8-bit integer
@@ -53,6 +54,10 @@ var t3 = [1:"a", 2:"b"]
 var s1 = [|int]               // empty set
 var s2 = [|int].(4)           // set with 5 elements space
 var s3 = [|3, 6, 9]
+
+func init(int size, value) void | size.elems.count.num { 
+  /* ... */
+}
 
 // call function that has only one argument with string/array/table/set type:
 Test.print(string s) void { /* ... */ }
