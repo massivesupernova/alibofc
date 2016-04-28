@@ -26,7 +26,7 @@ user defined postfix: operator'kg(int a) int      56'kg + 32'pd
 
 int literal: 0b1101 0o775 0xFA 42   0b1101_1100 0xFFBB_FFFE 430_323_1234
 char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c
-unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
+unicode literal: \u0A11 (utf-16), \u0000_0A11 (utf-32), \uu7F (utf-8)
 
 ???如何尽量消除指针
 ```
