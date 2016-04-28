@@ -80,7 +80,8 @@ var obj2 = new Child() as BaseClass
 常量可以赋值给变量，赋值后变量当前的值为这个常量值；
 变量可以暂时赋予不可修改属性，在一定范围内限制对它的修改；
 常量不应占用struct/class类空间和对象空间；
-值类型赋给不可修改变量会发生一次拷贝；引用类型对象赋给不可修改变量不发送拷贝，不能重新引用一个新的引用对象，也不能对引用对象进行修改
+值类型赋给不可修改变量会发生一次拷贝；
+引用类型对象赋给不可修改变量不发送拷贝，不能重新引用一个新的引用对象，也不能对引用对象进行修改
 常量/计算属性可以使用在enum/struct/class中，存储属性只能使用在struct/class中
 常量使用const和enum定义，变量使用var定义，不可修改变量使用immutable定义，还有两个修饰符是static和threadlocal
 @[?]引用类型声明为const无需监控其占用内存，实现是可以将引用类型的内容保存在常量中，不使用保存对象地址的方式
@@ -130,7 +131,8 @@ struct/class作用域 {
   (int a, b, c, var double d) 默认是immutable的，使用var可以指定对应变量可以修改
 
   // immutable 值类型：不会修改外部传入值，相当于C里面的声明(int a)但a的值不能修改
-  // variable 值类型：如 var int a相当于C里面的(int a)但是a的值可以修改，var& int a相当于C里面的(int* a)其值可以修改
+  // variable 值类型：如 var int a相当于C里面的(int a)但是a的值可以修改，
+  //                  var& int a相当于C里面的(int* a)其值可以修改
   // immutable引用类型：不会修改外部传入值
   // variable引用类型：可能会修改外部传入值
 
