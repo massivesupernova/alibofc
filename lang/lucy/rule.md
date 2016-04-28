@@ -113,6 +113,7 @@ var:Func addFunc2 = [x](a, b) {
   return x + a + b
 }
 var:Func addFunc3 = addFunc
+var addFunc4 = addFunc //函数类型可以自动推导出来
 
 var a = 3
 var aa = 3s
