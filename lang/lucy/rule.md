@@ -80,9 +80,125 @@ var obj2 = new Child() as BaseClass
 常量可以赋值给变量，赋值后变量当前的值为这个常量值；
 变量可以暂时赋予不可修改属性，在一定范围内限制对它的修改；
 常量不应占用struct/class类空间和对象空间；
-如果声明了不可修改变量，应该只占用类空间，而不应占用对象空间；
-值类型赋给不可修改变量会发生一次拷贝，引用类型对象赋给不可修改变量不发送拷贝
+值类型赋给不可修改变量会发生一次拷贝；引用类型对象赋给不可修改变量不发送拷贝，不能重新引用一个新的引用对象，也不能对引用对象进行修改
 常量/计算属性可以使用在enum/struct/class中，存储属性只能使用在struct/class中
+常量使用const和enum定义，变量使用var定义，不可修改变量使用immutable定义，还有两个修饰符是static和threadlocal
+@[?]引用类型声明为const无需监控其占用内存，实现是可以将引用类型的内容保存在常量中，不使用保存对象地址的方式
+@[?]但如果两个引用类型常量相同，一个常量仅保存指针指向另外一个常量
+
+全局作用域 {
+  // 常量
+  const PI = 3.14
+  enum Color {
+    Red 3, Yellow, Blue,
+  }
+
+  // 一般变量
+  var a = 3.14      // global shared variable
+  var _a = 6.28     // global variable only used in current file
+
+  // 一旦初始化就不能修改的变量
+  immutable b = a   // global shared variable
+  immutable _b = b  // global immutable only used in current file
+
+  // 线程存储变量
+  threadlocal t = 0 // thread local storage variableS
+}
+
+struct/class作用域 {
+  // 常量：不占用对象空间
+  const PI = 3.14
+
+  // 变量
+  var a = 0        // public variable
+  var _a = 0       // private variable, only available to current file
+  var aa = int?    // 不进行初始化的变量
+
+  // 不可修改变量
+  immutable b = a  // public immutable
+  immutable _b = b // private immutable, only available to current file
+
+  // static变量: 不占用对象空间
+  static var sa = 0         // public static variable
+  static var _sa = 0        // private static variable, only available to current file
+  static immutable sb = sa  // public static immutable
+  static immutable _sb = sb // private static immutable, only available to current file
+}
+
+局部作用域之函数参数 {
+  // 传引用还是传值由类型决定，不需要额外的关键字说明
+  (int a, b, c, var double d) 默认是immutable的，使用var可以指定对应变量可以修改
+
+  // immutable 值类型：不会修改外部传入值，相当于C里面的声明(int a)但a的值不能修改
+  // variable 值类型：如 var int a相当于C里面的(int a)但是a的值可以修改，var& int a相当于C里面的(int* a)其值可以修改
+  // immutable引用类型：不会修改外部传入值
+  // variable引用类型：可能会修改外部传入值
+
+  func modify(int a) { //在C实现中自动根据对应值类型的大小决定传值还是传const指针
+    a = 3 // error
+  }
+
+  func modify(var int a) { //在C实现中传值
+    a = 3 // ok, does't affect outside value
+  }
+
+  func modify(var& int a) { //在C实现中传指针
+    a = 3 // ok, affect outside value
+  }
+}
+
+局部作用域之函数体内 {
+  // 常量
+  const PI = 3.14
+
+  // 变量
+  var a = 0
+
+  // 不可修改变量
+  immutable b = a
+  
+  // static变量
+  static var sa = 0
+  static immutable sb = 0
+}
+
+// 小值转换成大值，可以直接使用后缀；否则必须进行强制转换，使用后缀还是会报错
+var a = Test() as Base
+var b = int(32.2)
+var c = double(32)
+var d = 32.2
+var e = 23f
+var f = 23ull
+
+var addFunc0 = (int a, b) int { 
+  return a + b 
+}
+
+var addFunc1 = addFunc
+
+typedef Func = (int a, b) int
+
+var addFunc2 = (lhs, rhs) as Func {
+  return lhs == rhs
+}
+
+var a = 0
+
+var addFunc3 = [a](x, y) as Func { 
+  return a + x + y
+}
+
+var addFunc4 = [var a](x, y) as Func {
+  a += 1
+  return a + x + y
+}
+```
+
+## 函数重载规则
+
+```c
+1. 参数只区分类型，不区分immutable还是variable
+2. 
 ```
 
 ## Uniform call syntex
