@@ -70,6 +70,13 @@ var obj = new ClassTest()
 var obj2 = new Child() as BaseClass
 ```
 
+## User defined type
+```c
+1. 真正的值传递 - 只要赋值就会拷贝一份   // 如swift中的struct以及基本类型，struct只能实现接口不能继承
+2. 优化的值传递 - 只有在修改时才拷贝     // 如swift中的string, array, table, set
+3. 引用传递                              // 如swift中的class
+```
+
 ## Uniform call syntex
 ```c
 f(x,y) if not found then try x.f(y)
