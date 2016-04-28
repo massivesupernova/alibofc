@@ -238,55 +238,51 @@ func _printTest() byte, byte {
 }
 
 // func:Func形式与等号一起使用
-var:Func addFunc = (a, b) {
+var addFunc = (a, b) as Func {
   return a + b
 }
 var x = 3
-var:Func addFunc2 = [x](a, b) {
+var addFunc2 = [x](a, b) as Func {
   return x + a + b
 }
-var:Func addFunc3 = addFunc
-var addFunc4 = addFunc //函数类型可以自动推导出来
+var addFunc3 = addFunc //函数类型可以自动推导出来
 
 var a = 3
 var aa = 3s
 var bb = 4LL
 var cc = 23.0
 
-var:float f1 = 23
-var:float fa = 234
-var:float fb = 232
-var fc = 231f
+var f1 = float(23)
+var fa = 234f
 
 const PI = 3.1415926
 const MaxSize = 128
 const Tag = "abcd"
 const GoldenSeq = [1, 3, 5, 7]
-const:byte B1 = 23
-cosnt:byte B2 = 23b
+const B1 = byte(23)
+cosnt B2 = 23b
 
 enum Color {
-  Red 3LL, 
+  Red = 3LL, 
   Yellow, 
   Blue
 }
 
-enum:byte Color2 {
-  Red 3,
+enum Color2 {
+  Red = byte(3),
   Yellow,
   Blue,
 }
 
 //数据成员、参数声明列表使用Type name形式
 class _Test {
-  int size   // default init to 0
-  int offset? // need init it manually
+  var size = 0
+  var offset = int? // need init it manually
 } 
 
 class DefaultInit {
-  typedef Equal = (int, int) byte
-  Equal equal = UserEqual // member is private
-  int mask = 0xFFFF       // member is private
+  var equal = UserEqual // member is private
+  var mask = 0xFFFF     // member is private
 }
 
 func setter(Test) {
@@ -315,7 +311,7 @@ func _start(Test, int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y }
 }
 
-func _start(var:Test, int a, int b) {
+func _start(var Test, int a, int b) {
   return
 }
 
