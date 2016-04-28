@@ -13,6 +13,7 @@ uint16 int16 - unsigned/signed 16-bit integer
 uint32 int32 - unsigned/signed 32-bit integer
 uint64 int64 - unsigned/signed 64-bit integer
 float/double
+string
 
 postfix: 23ub  23b    8-bit
          23ui  23     machine word size
@@ -35,11 +36,6 @@ unicode literal: 0u0A11 (utf-16), 0u0000_0A11 (utf-32), 0uu7F (utf-8)
 
 ## Standard Container
 ```c
-string: "abcd"
-array: [23, 46, 72,]
-table: [23:"abcd", 42:"def"]
-set: [|1, 2, 3]
-
 var a = 3.0
 var str = "double =\(a)"
 
