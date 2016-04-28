@@ -91,7 +91,7 @@ var obj2 = new Child() as BaseClass
   // 常量
   const PI = 3.14
   enum Color {
-    Red 3, Yellow, Blue,
+    Red = 3, Yellow, Blue,
   }
 
   // 一般变量
@@ -237,7 +237,6 @@ func _printTest() byte, byte {
   return 1, 1
 }
 
-// func:Func形式与等号一起使用
 var addFunc = (a, b) as Func {
   return a + b
 }
@@ -299,7 +298,7 @@ func print(Test) void {
 }
 
 // mutable version
-func print(var:Test) void {
+func print(var Test) void {
   Print(.size)
 }
 
