@@ -25,8 +25,8 @@ postfix: 23ub  23b    8-bit
 user defined postfix: operator'kg(int a) int      56'kg + 32'pd
 
 int literal: 0b1101 0o775 0xFA 42   0b1101_1100 0xFFBB_FFFE 430_323_1234
-char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c
-unicode literal: \u0A11 (utf-16), \u0000_0A11 (utf-32), \uu7F (utf-8)
+char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c, \n, \t, \x(FF), \d(255), \o(777), \b(0110_0111)
+unicode literal: \u(1F21): utf-16, \u(0000_0A11): utf-32, \utf8(7F) \utf8(0000_0A11) 
 
 struct HtmlDoc {
   var lang = string?        // 在赋值之前进行读取会报错
@@ -338,7 +338,7 @@ func getter(Test) {
 
 // const version
 func print(Test) void {
-  Print(.size)
+  Print(.size) // 相当于Print(self.size)
 }
 
 // mutable version
@@ -356,6 +356,10 @@ func _start(Test, int a) int num, Func sum {
 
 func _start(var& Test, int a, b) {
   return
+}
+
+func transform(int) string {
+  return "{{%x|self}}"
 }
 
 // Class static functions
