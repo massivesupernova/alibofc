@@ -51,16 +51,16 @@ var s2 = "complex calculate {{
 }}"
 
 // @print函数，必须通过显式参数名称传递参数，例如print(.a = 42)
-func calculate(@) void {
+func calculate(double dval, dval2, @) void {
   // @a = int? 表示a是这个函数的一个int参数，并且没有默认值
   // @b = 3.21 表示b是这个函数的一个double参数，并且有默认值3.21 
   add(@a = int?, @b = 3.21)
   mul(@a, @b)
   
   // 也可以这样定义
-  var @c = int? // 参数c是可修改参数
+  @c = var int? // 参数c是可修改参数
   @d = 3.21
-  add(@c, @d)
+  sum(@c, @d, dval1, dval2)
 }
 
 var a1 = [int]                   // empty array
@@ -187,6 +187,10 @@ struct/class作用域 {
   // static变量
   static var sa = 0
   static immutable sb = 0
+  
+  @c = int?     // c是函数的int参数，没有默认值
+  @d = var int? // d是函数的var int参数，没有默认值
+  @e = 12f      // e是函数的float参数，默认值为12f
 }
 
 // 小值转换成大值，可以直接使用后缀；否则必须进行强制转换，使用后缀还是会报错
