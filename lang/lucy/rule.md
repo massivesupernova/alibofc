@@ -34,7 +34,7 @@ unicode literal: \u0A11 (utf-16), \u0000_0A11 (utf-32), \uu7F (utf-8)
 ## Standard Container
 ```c
 var a = 3.0
-var str = "double =\(a)"
+var str = "double = {{a}}"
 
 var a1 = [int]                   // empty array
 var a2 = [int].(size=3,value=0)  // array with 3 elements
