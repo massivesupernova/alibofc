@@ -394,4 +394,5 @@ func sum(int... args) int {
 ## Meta Programming
 
 ```c
+tuple#(int)
 ```
