@@ -50,6 +50,22 @@ var s2 = "complex calculate {{
   add(a, b, c) //上文必须已经定义了a和c，以及函数add
 }}"
 
+// 1. 普通字符串
+var s1 = "doube dval = {{dval}}\tfloat fval = {{fval}}\n"
+// 2. 原始字符串，不会对其中的字符进行转义
+var s2 = ```c:\nop\data.txt```
+// 3. 多行字符串，相当于"string line one\nstring line two\n"
+var s3 = {"""2 //去掉行前的2个空格
+  string line one
+  string line two
+"""}
+var s4 = {```2
+  string line one
+  string line two
+```}
+// 4. 将文件转换成字符串
+var s4 = ```here is a string of file =>{{#inc "layout/header.html"}}```
+
 // @calculate函数中的@参数必须通过显式参数名称传递参数，例如calcluate(3.14, 1.0, .a = 42)
 func calculate(double dval, dval2, @) void {
   // @a = int? 表示a是这个函数的一个int参数，并且没有默认值
