@@ -19,7 +19,7 @@ postfix: 23ub  23b    8-bit
          23ui  23     machine word size
          23us  23s    16-bit
          23ul  23L    32-bit
-         23ull 23LL   64-bit
+         23ull 23LL   64-bit 
          23f   23.0   float double
 
 user defined postfix: operator'kg(int a) int      56'kg + 32'pd
@@ -71,12 +71,12 @@ func calculate(double dval, dval2, @) void {
   // @a = int? 表示a是这个函数的一个int参数，并且没有默认值
   // @b = 3.21 表示b是这个函数的一个double参数，并且有默认值3.21 
   add(@a = int?, @b = 3.21)
-  mul(@a, @b)
+  mul(a, b)
   
   // 也可以这样定义
   @c = var int? // 参数c是可修改参数
   @d = 3.21
-  sum(@c, @d, dval1, dval2)
+  sum(c, d, dval1, dval2)
 }
 
 var a1 = [int]                   // empty array
@@ -200,7 +200,10 @@ struct/class作用域 {
   static var sa = 0
   static immutable sb = 0
   
-  @size.num.count = int?     // size/num/count（同一个参数的别名）是函数的int参数，没有默认值
+  // size/num/count（同一个参数的别名）是函数的int参数，没有默认值
+  // 注意在函数内部只能使用size这个名称
+  @size.num.count = int?
+
   @d = var int? // d是函数的var int参数，没有默认值
   @e = 12f      // e是函数的float参数，默认值为12f
 }
@@ -325,7 +328,7 @@ class DefaultInit: Base {
   var mask = 0xFFFF     // member is private
 }
 
-func setter(Test) {
+func setter(var Test) {
 
 }
 
@@ -351,17 +354,17 @@ func _start(Test, int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y }
 }
 
-func _start(var Test, int a, b) {
+func _start(var& Test, int a, b) {
   return
 }
 
 // Class static functions
 
-func Test.create(int a, b) {
+func Test:create(int a, b) Test {
   return Test(1, 2)
 }
 
-func Test._create() {
+func Test:create() Test {
   return Test.create(0, 1)
 }
 
