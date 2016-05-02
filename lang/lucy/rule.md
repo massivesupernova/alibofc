@@ -64,20 +64,16 @@ func calculate(double dval, dval2, @) void {
 }
 
 var a1 = [int]                   // empty array
-var a2 = [int].(size=3,value=0)  // array with 3 elements
+var a2 = [int](size=3,value=0)  // array with 3 elements
 var a3 = [1, 2, 3]
 
 var t1 = [int:string]            // empty table
-var t2 = [int:string].(size=128) // table with 128 elements space
+var t2 = [int:string](size=128) // table with 128 elements space
 var t3 = [1:"a", 2:"b"]
 
 var s1 = [|int]               // empty set
 var s2 = [|int].(4)           // set with 5 elements space
 var s3 = [|3, 6, 9]
-
-func initIntArray(int size, value) void | size.elems.count.num { 
-  /* ... */
-}
 
 // call function that has only one argument with string/array/table/set type:
 Test.print(string s) void { /* ... */ }
@@ -188,7 +184,7 @@ struct/class作用域 {
   static var sa = 0
   static immutable sb = 0
   
-  @c = int?     // c是函数的int参数，没有默认值
+  @size.num.count = int?     // size/num/count（同一个参数的别名）是函数的int参数，没有默认值
   @d = var int? // d是函数的var int参数，没有默认值
   @e = 12f      // e是函数的float参数，默认值为12f
 }
