@@ -50,7 +50,7 @@ var s2 = "complex calculate {{
   add(a, b, c) //上文必须已经定义了a和c，以及函数add
 }}"
 
-// @print函数，必须通过显式参数名称传递参数，例如print(.a = 42)
+// @calculate函数中的@参数必须通过显式参数名称传递参数，例如calcluate(3.14, 1.0, .a = 42)
 func calculate(double dval, dval2, @) void {
   // @a = int? 表示a是这个函数的一个int参数，并且没有默认值
   // @b = 3.21 表示b是这个函数的一个double参数，并且有默认值3.21 
