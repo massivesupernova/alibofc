@@ -58,9 +58,9 @@ func calculate(@) void {
   mul(@a, @b)
   
   // 也可以这样定义
-  @a = int?
-  @b = 3.21
-  add(@a, @b)
+  var @c = int? // 参数c是可修改参数
+  @d = 3.21
+  add(@c, @d)
 }
 
 var a1 = [int]                   // empty array
