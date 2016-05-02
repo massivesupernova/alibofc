@@ -28,6 +28,16 @@ int literal: 0b1101 0o775 0xFA 42   0b1101_1100 0xFFBB_FFFE 430_323_1234
 char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c
 unicode literal: \u0A11 (utf-16), \u0000_0A11 (utf-32), \uu7F (utf-8)
 
+struct HtmlDoc {
+  var lang = string?        // 在赋值之前进行读取会报错
+  var title = string?
+  var body = Content?
+  var charset = "utf-8"
+  var metaData = [MetaTag]
+  var css = [LinkTag]
+  var js = [ScriptTag]
+}
+
 ???如何尽量消除指针
 ```
 
@@ -35,6 +45,23 @@ unicode literal: \u0A11 (utf-16), \u0000_0A11 (utf-32), \uu7F (utf-8)
 ```c
 var a = 3.0
 var str = "double = {{a}}"
+var s2 = "complex calculate {{
+  var b = 3.14
+  add(a, b, c) //上文必须已经定义了a和c，以及函数add
+}}"
+
+// @print函数，必须通过显式参数名称传递参数，例如print(.a = 42)
+func calculate(@) void {
+  // @a = int? 表示a是这个函数的一个int参数，并且没有默认值
+  // @b = 3.21 表示b是这个函数的一个double参数，并且有默认值3.21 
+  add(@a = int?, @b = 3.21)
+  mul(@a, @b)
+  
+  // 也可以这样定义
+  @a = int?
+  @b = 3.21
+  add(@a, @b)
+}
 
 var a1 = [int]                   // empty array
 var a2 = [int].(size=3,value=0)  // array with 3 elements
