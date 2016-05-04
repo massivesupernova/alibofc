@@ -396,13 +396,11 @@ func sum(int... args) int {
 ## Meta Programming
 
 ```c
-// 逻辑上每调用一次print会新定义一个结构体#tuple
-// args是这个结构体的实例变量
-// foreach可以依次遍历结构体的各个成员
-func print(#tuple args) void {
-  
-}
-
+// 在语法上，变量的定义和函数的调用是编译时多态的
+// foreach可能的用法：
+// - 遍历容器(string, array, set, table)访问元素、索引+元素，键，值，键+值，等等
+// - 遍历用户自定义对象的各个数据成员
+// - 根据range遍历各种对象，如File的每行，视频的每帧，等等
 func print#(T, U, double RATE)(T t, U u, #tuple args) void {
   
 }
@@ -422,5 +420,19 @@ enum isGreaterType#(T, U, int SIZE) {
   Red = 3
   Yellow
   Blue
+}
+
+// 逻辑上每调用一次print会新定义一个结构体#tuple
+// args是这个结构体的实例变量
+// foreach可以依次遍历结构体的各个成员 ???
+foreach (/* loop variables */ in obj) {
+  /* ... exprs inside the foreach block ...*/
+} ???
+obj.opApply([](/* loop variables */) int { /* ... exprs inside the foreach block ...*/ return hasBeenTerminated })
+
+func print(#tuple args) void {
+  #for (arg in args) {
+    
+  } 
 }
 ```
