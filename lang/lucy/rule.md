@@ -80,15 +80,15 @@ func calculate(double dval, dval2, @) void {
 }
 
 var a1 = [int]                   // empty array
-var a2 = [int](size=3,value=0)  // array with 3 elements
+var a2 = [int](.size=3,.value=0)  // array with 3 elements
 var a3 = [1, 2, 3]
 
 var t1 = [int:string]            // empty table
-var t2 = [int:string](size=128) // table with 128 elements space
+var t2 = [int:string](.size=128) // table with 128 elements space
 var t3 = [1:"a", 2:"b"]
 
 var s1 = [|int]               // empty set
-var s2 = [|int].(4)           // set with 5 elements space
+var s2 = [|int](.size=4)           // set with 5 elements space
 var s3 = [|3, 6, 9]
 
 // call function that has only one argument with string/array/table/set type:
@@ -218,26 +218,34 @@ var d = 32.2
 var e = 23f
 var f = 23ull
 
-var addFunc0 = (int a, b) int { 
+var addFunc0 = func (int a, b) int { 
   return a + b 
 }
 
 var addFunc1 = addFunc
 
-typedef Func = (int a, b) int
+typedef Func = func (int a, b) int // 必须给定参数名称
 
-var addFunc2 = (lhs, rhs) as Func {
-  return lhs == rhs
+var addFunc2 = Func {
+  return @a + @b
 }
 
 var a = 0
 
-var addFunc3 = [a](x, y) as Func { 
-  return a + x + y
+var addFunc3 = Func [a] { // 这里[]内的a是传递实参不是参数定义
+  return a + @a + @b
 }
 
-var addFunc4 = [var a](x, y) as Func {
+var addFunc4 = Func [&a] { // 这里[]内的a是传递实参不是参数定义
   a += 1
+  return a + @a + @b
+}
+
+var addFunc5 = func (int x, y) int {
+  return x + y
+}
+
+var addFunc6 = func [a](int x, y) int {
   return a + x + y
 }
 ```
@@ -273,7 +281,7 @@ using lucy.stream.* //提示所有同名标识符，using只能占用一行
 // - const
 // - class
 
-typedef Func = (int, int) int
+typedef Func = func (int a, int b) int
 
 func printTest(int a) byte {
   return byte(a)
@@ -283,12 +291,12 @@ func _printTest() byte, byte {
   return 1, 1
 }
 
-var addFunc = (a, b) as Func {
-  return a + b
+var addFunc = Func {
+  return @a + @b
 }
 var x = 3
-var addFunc2 = [x](a, b) as Func {
-  return x + a + b
+var addFunc2 = Func [x] {
+  return x + @a + @b
 }
 var addFunc3 = addFunc //函数类型可以自动推导出来
 
