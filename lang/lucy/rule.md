@@ -168,8 +168,7 @@ struct/class作用域 {
   (int a, b, c, var double d) 默认是immutable的，使用var可以指定对应变量可以修改
 
   // immutable 值类型：不会修改外部传入值，相当于C里面的声明(int a)但a的值不能修改
-  // variable 值类型：如 var int a相当于C里面的(int a)但是a的值可以修改，
-  //                  var& int a相当于C里面的(int* a)其值可以修改
+  // variable 值类型：如 var int a相当于C里面的(int a)或(int* a)
   // immutable引用类型：不会修改外部传入值
   // variable引用类型：可能会修改外部传入值
 
@@ -357,7 +356,7 @@ func _start(Test, int a) int num, Func sum {
   return 2, [a](x, y) { return a + x + y }
 }
 
-func _start(var& Test, int a, b) {
+func _start(var Test, int a, b) {
   return
 }
 
