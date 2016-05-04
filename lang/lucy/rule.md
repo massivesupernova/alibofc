@@ -404,13 +404,17 @@ func print(#tuple args) void {
   
 }
 
-class Table #T, #U {
+func print#(T, U, double RATE)(T t, U u, #tuple args) void {
   
 }
 
-enum isGreaterType #T, #U, int SIZE {
+class Table#(T, U) {
+  
+}
+
+enum isGreaterType#(T, U, int SIZE) {
   isGreaterType = T.sizeof > U.sizeof
-  static if (T.sizeof >= U.sizeof) {
+  #if (T.sizeof >= U.sizeof) {
     typedef MaxType = T
   }
   else {
