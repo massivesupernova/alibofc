@@ -309,15 +309,15 @@ const B1 = byte(23)
 cosnt B2 = 23b
 
 enum Color {
-  Red = 3LL, 
-  Yellow, 
+  Red = 3LL
+  Yellow
   Blue
 }
 
 enum Color2 {
-  Red = byte(3),
-  Yellow,
-  Blue,
+  Red = byte(3)
+  Yellow
+  Blue
 }
 
 //数据成员、参数声明列表使用Type name形式
@@ -397,5 +397,27 @@ func sum(int... args) int {
 ## Meta Programming
 
 ```c
-tuple#(int)
+// 逻辑上每调用一次print会新定义一个结构体#tuple
+// args是这个结构体的实例变量
+// foreach可以依次遍历结构体的各个成员
+func print(#tuple args) void {
+  
+}
+
+class Table(T,U) {
+  
+}
+
+enum isGreaterType(T, U) {
+  isGreaterType = T.sizeof > U.sizeof
+  static if (T.sizeof >= U.sizeof) {
+    typedef MaxType = T
+  }
+  else {
+    typedef MaxType = U
+  }
+  Red = 3
+  Yellow
+  Blue
+}
 ```
