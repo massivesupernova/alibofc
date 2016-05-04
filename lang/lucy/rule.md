@@ -177,13 +177,16 @@ struct/class作用域 {
     a = 3 // error
   }
 
-  func modify(var int a) { //在C实现中传值
+  //在C实现中会定义两个版本：传值和传指针
+  //对引用类型都一样，在函数内可能会改变引用对象的值
+  //对值类型，如果直接传入参数例如modify(a)不会修改外部的值，如果传入modify(&a)则会修改外部的值
+  func modify(var int a) {
     a = 3 // ok, does't affect outside value
   }
 
-  func modify(var& int a) { //&只能用来修饰值类型，在C实现中传指针
-    a = 3 // ok, affect outside value
-  }
+  //func modify(var& int a) { //&只能用来修饰值类型，在C实现中传指针
+  //  a = 3 // ok, affect outside value
+  //}
 }
 
 局部作用域之函数体内 {
