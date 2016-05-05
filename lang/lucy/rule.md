@@ -381,7 +381,33 @@ func Test:create(int a, b) Test {
 func Test:create() Test {
   return Test.create(0, 1)
 }
+```
 
+## 自定义类型
+
+```c
+struct和class继承自定义类型的话，只能将基类作为第一个数据成员的方式进行继承；
+只有class才能继承接口；
+
+class Base {
+  var a = 0
+  var b = 0
+}
+
+class Child {
+  var Base
+  var c = 0
+  var d = 0
+}
+
+interface ICar {
+  func drive() void
+  func stop() void
+}
+
+class MyCar as ICar {
+  
+}
 ```
 
 ## Member reference 
@@ -465,4 +491,21 @@ func print(#tuple args) void {
     print("{{i}}: {{arg.typestr}} {{arg.stringof}}") 
   }
 }
+
+var t1 = tuple(12, x+y, 3.14, "abc")
+t1[0].stringof //"12"
+t1[1].stringof //"x+y"
+t1[2].stringof //"3.14"
+t1[3].stringof //"abc"
+
+var t2 = TupleDemo.tupleof
+t2[0].typestr // "int"
+t2[0].stringof // "ival"
+t2[1].stringof // "dval"
+
+var t3 = tuple(.start = 1, .end = 10)
+t3[0].typestr // "int"
+t3[0].stringof // "1"
+t3.start // "1"
+t3.end // "10"
 ```
