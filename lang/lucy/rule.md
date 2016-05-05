@@ -266,14 +266,14 @@ Test.print(t) will seek Test|print(Test: test)
 
 ## Data and its method
 ```c
-space lucy.test
-using lucy.core.Print, Scanf //只需要导入struct/class名称，文件作用域内的全局变量名、函数名、常量名、函数类型名称
-using lucy.base.Fopen as FileOpen, Fclose as FileClose, Fread as BaseFileRead
-using lucy.stream.* //提示所有同名标识符，using只能占用一行
+module lucy.test
+import lucy.core.Print, Scanf //只需要导入struct/class名称，文件作用域内的全局变量名、函数名、常量名、函数类型名称
+import lucy.base.Fopen as FileOpen, Fclose as FileClose, Fread as BaseFileRead
+import lucy.stream.* //提示所有同名标识符，using只能占用一行
 
 // possible global prefix, multiple defines can be group in { and }
-// - space
-// - using
+// - module
+// - import
 // - typedef
 // - var
 // - func
