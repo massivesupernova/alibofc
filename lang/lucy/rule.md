@@ -422,7 +422,7 @@ args.length //编译时常量
 args.typeid //编译时常量，但对于多态继承的类会保存到虚拟指针列表中
 args.typestr //编译时常量，但对于多态继承的类会保存到虚拟指针列表中
 args.typecat //编译时常量，"integer float string array set table function enum const struct class union"
-args.argname //编译时常量
+arg[0].stringof //编译时常量
 typeof(args[0]) //编译时类型推导
 
 
@@ -462,7 +462,7 @@ obj.opApply([](/* loop variables */) int { /* ... exprs inside the foreach block
 
 func print(#tuple args) void {
   foreach(i, arg) in args {
-    print("{{i}}: {{arg.typestr}} {{arg.argname}}") 
+    print("{{i}}: {{arg.typestr}} {{arg.stringof}}") 
   }
 }
 ```
