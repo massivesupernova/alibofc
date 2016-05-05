@@ -404,20 +404,42 @@ func sum(int... args) int {
 ## Meta Programming
 
 ```c
+
+struct TupleDemo {
+  int ival;
+  double dval;
+}
+static const int TupleDemo_sizeof = sizeof(TupleDemo);
+static const int TupleDemo_length = 2;
+
+static const int int_sizeof = sizeof(int)
+static const int int_typeid = /* ... */;
+static const char* int_type
+
+var args = TupleDemo()
+args.sizeof //编译时常量
+args.length //编译时常量
+args.typeid //编译时常量，但对于多态继承的类会保存到虚拟指针列表中
+args.typestr //编译时常量，但对于多态继承的类会保存到虚拟指针列表中
+args.typecat //编译时常量，"integer float string array set table function enum const struct class union"
+args.argname //编译时常量
+typeof(args[0]) //编译时类型推导
+
+
 // 在语法上，变量的定义和函数的调用是编译时多态的
 // foreach可能的用法：
 // - 遍历容器(string, array, set, table)访问元素、索引+元素，键，值，键+值，等等
 // - 遍历用户自定义对象的各个数据成员
 // - 根据range遍历各种对象，如File的每行，视频的每帧，等等
-func print#(T, U, double RATE)(T t, U u, #tuple args) void {
+func print(T, U, double RATE)(T t, U u, #tuple args) void {
   
 }
 
-class Table#(T, U) {
+class Table(T, U) {
   
 }
 
-enum isGreaterType#(T, U, int SIZE) {
+enum isGreaterType(T, U, int SIZE) {
   isGreaterType = T.sizeof > U.sizeof
   #if (T.sizeof >= U.sizeof) {
     typedef MaxType = T
@@ -439,8 +461,8 @@ foreach (/* loop variables */ in obj) {
 obj.opApply([](/* loop variables */) int { /* ... exprs inside the foreach block ...*/ return hasBeenTerminated })
 
 func print(#tuple args) void {
-  #for (arg in args) {
-    
-  } 
+  foreach(i, arg) in args {
+    print("{{i}}: {{arg.typestr}} {{arg.argname}}") 
+  }
 }
 ```
