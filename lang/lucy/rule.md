@@ -338,12 +338,28 @@ class DefaultInit: Base {
   var mask = 0xFFFF     // member is private
 }
 
-func setter(var Test) {
-
+class Point {
+  var x = 0.0
+  var y = 0.0
 }
 
-func getter(Test) {
+class Size {
+  var width = 0.0
+  var height = 0.0
+}
 
+class Rect {
+  var origin = Point()
+  var size = Size()
+}
+
+func center(Rect) Point {
+  get {
+    // ...
+  }
+  set(newCenter) {
+    // ...
+  }
 }
 
 // const version
