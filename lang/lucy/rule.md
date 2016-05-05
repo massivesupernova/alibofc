@@ -254,7 +254,17 @@ var addFunc6 = func [a](int x, y) int {
 
 ```c
 1. 参数只区分类型，不区分immutable还是variable
-2. 
+2. 函数还可以通过显式参数名不同来重载，即使类型和其他条件都一样，例如：
+   func print(@) void {
+      @count = int?
+      // ...
+   }
+   func print(@) void {
+     @size = int?
+     // ...
+   }
+   print(.size = 1)  // 调用第2个
+   print(.count = 2) // 调用第1个
 ```
 
 ## Uniform call syntex
@@ -353,6 +363,7 @@ class Rect {
   var size = Size()
 }
 
+// read-write
 func center(Rect) Point {
   get {
     // ...
@@ -360,6 +371,11 @@ func center(Rect) Point {
   set(newCenter) {
     // ...
   }
+}
+
+// read-only
+func width(Rect) double {
+  return .size.width
 }
 
 // const version
