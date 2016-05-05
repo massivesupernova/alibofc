@@ -420,7 +420,7 @@ pobj->m, obj.m => pobj.m, obj.m
 // ... ..< ..=
 func sum(int... args) int { 
   var total = 0
-  for (elem in args) {
+  foreach(elem) in args {
     total += args
   }
   return total
