@@ -128,7 +128,7 @@ var obj2 = new Child() as BaseClass
   // 常量
   const PI = 3.14
   enum Color {
-    Red = 3, Yellow, Blue,
+    Red = 3 Yellow Blue
   }
 
   // 一般变量
