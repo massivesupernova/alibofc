@@ -418,6 +418,12 @@ func Test:create() Test {
 ## 自定义类型
 
 ```c
+值类型与引用类型的区别：
+1. 值类型的对象都拥有相互独立的值，不相互影响
+2. 引用类型的对象是共享的，多个变量可以引用同一个对象
+
+???如果管理引用类型的内存
+
 struct和class继承自定义类型的话，只能将基类作为第一个数据成员的方式进行继承；
 只有class才能继承接口；
 
@@ -437,8 +443,9 @@ interface ICar {
   func stop() void
 }
 
-class MyCar as ICar {
-  
+class MyCar: ICar, IBase {
+  var BaseClass
+  var miles = 0.0
 }
 ```
 
