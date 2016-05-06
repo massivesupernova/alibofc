@@ -124,6 +124,19 @@ var obj2 = new Child() as BaseClass
 @[?]引用类型声明为const无需监控其占用内存，实现是可以将引用类型的内容保存在常量中，不使用保存对象地址的方式
 @[?]但如果两个引用类型常量相同，一个常量仅保存指针指向另外一个常量
 
+???自定义类型的默认构造函数都将内容清0不做其他事，如果有init而且在使用之前没有赋值则使用时会先调用init;
+// primitive type - bool char byte int double uptr
+// compound type - string array table set
+// user defined type - struct class
+int ival
+int[3] iarr // 普通数据只能用在primitive类型上
+string sval
+[int] aval
+[|int] setv
+[int:string] tval
+ValObj value
+RefObj refval
+
 全局作用域 {
   // 常量
   const PI = 3.14
@@ -151,6 +164,7 @@ struct/class作用域 {
   var a = 0        // public variable
   var _a = 0       // private variable, only available to current file
   var aa = int?    // 不进行初始化的变量
+  var bb = RefObj? // ???
 
   // 不可修改变量
   immutable b = a  // public immutable
@@ -204,9 +218,9 @@ struct/class作用域 {
   
   // size/num/count（同一个参数的别名）是函数的int参数，没有默认值
   // 注意在函数内部只能使用size这个名称
-  @size.num.count = int?
+  @size.num.count int
 
-  @d = var int? // d是函数的var int参数，没有默认值
+  @d var int    // d是函数的var int参数，没有默认值
   @e = 12f      // e是函数的float参数，默认值为12f
 }
 
@@ -256,11 +270,11 @@ var addFunc6 = func [a](int x, y) int {
 1. 参数只区分类型，不区分immutable还是variable
 2. 函数还可以通过显式参数名不同来重载，即使类型和其他条件都一样，例如：
    func print(@) void {
-      @count = int?
+      @count int
       // ...
    }
    func print(@) void {
-     @size = int?
+     @size int
      // ...
    }
    print(.size = 1)  // 调用第2个
@@ -438,6 +452,7 @@ class Child {
   var d = 0
 }
 
+// 接口只能包括常量和函数声明
 interface ICar {
   func drive() void
   func stop() void
