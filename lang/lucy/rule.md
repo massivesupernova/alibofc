@@ -29,17 +29,29 @@ int literal: 0b1101 0o775 0xFA 42   0b1101_1100 0xFFBB_FFFE 430_323_1234
 char literal: ' ', 'Space', 'Tab', 'Enter', 'a', 'b', 'c', 42c, 0xF3c, \n, \t, \x(FF), \d(255), \o(777), \b(0110_0111)
 unicode literal: \u(1F21): utf-16, \u(0000_0A11): utf-32, \utf8(7F) \utf8(0000_0A11) 
 
+// 如果struct中的所有数据成员都是zero init的，且该结构也会zero init，则这个结果也是zero init的
 struct HtmlDoc {
-  var lang = string?        // 在赋值之前进行读取会报错
-  var title = string?
-  var body = Content?
-  var charset = "utf-8"
+  var lang = string
+  var title = string
+  var body = Content
+  var charset = CharsetAttr"utf-8"
   var metaData = [MetaTag]
   var css = [LinkTag]
   var js = [ScriptTag]
 }
 
 ???如何尽量消除指针
+
+var a = int     // 使用默认值初始化，相当于int()
+var b = 3       // 其他值初始化
+var c = [int]   // 默认值初始化，相当于[int]()
+var d = [0, 2]  // 其他值初始化
+var e = [int](.size=8,.value=0)
+var f = string  // 相当于""，也相当于string()
+var f = "abc"
+var charset = CharsetAttr"utf-8"
+var r = new RefValue // 引用类型必须使用new分配对象，相当于new RefValue()
+var v = RefValue?    // 引用类型也可以使用?表示当前变量是可空变量，它的初始值为nil，使用时必须先判断是否为空
 ```
 
 ## Standard Container
@@ -69,13 +81,13 @@ var s4 = ```here is a string of file =>{{#inc "layout/header.html"}}```
 
 // @calculate函数中的@参数必须通过显式参数名称传递参数，例如calcluate(3.14, 1.0, .a = 42)
 func calculate(double dval, dval2, @) void {
-  // @a = int? 表示a是这个函数的一个int参数，并且没有默认值
+  // @a int 表示a是这个函数的一个int参数，并且没有默认值
   // @b = 3.21 表示b是这个函数的一个double参数，并且有默认值3.21 
-  add(@a = int?, @b = 3.21)
+  add(@a int, @b = 3.21)
   mul(a, b)
   
   // 也可以这样定义
-  @c = var int? // 参数c是可修改参数
+  @c var int // 参数c是可修改参数
   @d = 3.21
   sum(c, d, dval1, dval2)
 }
@@ -242,18 +254,18 @@ var addFunc1 = addFunc
 typedef Func = func (int a, b) int // 必须给定参数名称
 
 var addFunc2 = Func {
-  return @a + @b
+  return $a + $b
 }
 
 var a = 0
 
 var addFunc3 = Func [a] { // 这里[]内的a是传递实参不是参数定义
-  return a + @a + @b
+  return a + $a + $b // 或者 return a + $1 + $2
 }
 
 var addFunc4 = Func [&a] { // 这里[]内的a是传递实参不是参数定义
   a += 1
-  return a + @a + @b
+  return a + $a + $b
 }
 
 var addFunc5 = func (int x, y) int {
@@ -263,6 +275,16 @@ var addFunc5 = func (int x, y) int {
 var addFunc6 = func [a](int x, y) int {
   return a + x + y
 }
+
+// addTwo 的类型为 func (int x) int
+var addTwo = addFunc6 as ($y = 2) // 或者($2 = 2)
+
+// 最后一个函数参数的简写
+sort([0, 3, 2, 5]){ $1 < $2 }
+sort([0, 3, 2, 5], <)
+[0, 3, 2, 5].sort(<)
+// 相当于
+sort([0, 3, 2, 5], func (int x, y) bool { return x < y })
 ```
 
 ## 函数重载规则
@@ -317,11 +339,11 @@ func _printTest() byte, byte {
 }
 
 var addFunc = Func {
-  return @a + @b
+  return $a + $b
 }
 var x = 3
 var addFunc2 = Func [x] {
-  return x + @a + @b
+  return x + $a + $b
 }
 var addFunc3 = addFunc //函数类型可以自动推导出来
 
@@ -404,11 +426,11 @@ func print(var Test) void {
 }
 
 func @override start(Test) int, Func {
-  return 1, (x, y) { return x + y }
+  return 1, func (x, y) { return x + y }
 }
 
 func _start(Test, int a) int num, Func sum {
-  return 2, [a](x, y) { return a + x + y }
+  return 2, func [a](x, y) { return a + x + y }
 }
 
 func _start(var Test, int a, b) {
@@ -463,7 +485,7 @@ class MyCar: ICar, IBase {
   var BaseClass
   var miles = 0.0
   // 默认构造函数如果有定义且没有手动调用其它构造函数的话会在对象第一次使用前调用
-  init() {}
+  init() @zero
   // 非默认构造函数
   init(int a, b) {}
   // 析构函数，在对象释放时调用（值类型退出作用域，引用类型正在释放时）
