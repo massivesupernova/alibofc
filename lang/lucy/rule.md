@@ -462,7 +462,30 @@ interface ICar {
 class MyCar: ICar, IBase {
   var BaseClass
   var miles = 0.0
+  // 默认构造函数如果有定义且没有手动调用其它构造函数的话会在对象第一次使用前调用
+  init() {}
+  // 非默认构造函数
+  init(int a, b) {}
+  // 析构函数，在对象释放时调用（值类型退出作用域，引用类型正在释放时）
+  deinit() {}
 }
+
+// 为值类型自动插入析构函数
+func getValObj() ValData {
+  var a = ValData()
+  return a
+}
+ValData getValObj() {
+  ValData_struct a;
+  ValData_init(&a);
+  ValData_struct tmp = a;
+  ValData_deinit(&a);
+  return tmp;
+}
+
+
+
+
 ```
 
 ## Member reference 
