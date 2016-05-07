@@ -54,6 +54,10 @@ var r = new RefValue // 引用类型必须使用new分配对象，相当于new R
 var v = RefValue?    // 引用类型也可以使用?表示当前变量是可空变量，它的初始值为nil，使用时必须先判断是否为空
 ```
 
+## 错误处理
+
+@error返回值的函数必须检查错误，否则会报错
+
 ## Standard Container
 ```c
 var a = 3.0
