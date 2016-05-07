@@ -52,6 +52,8 @@ var f = "abc"
 var charset = CharsetAttr"utf-8"
 var r = new RefValue // 引用类型必须使用new分配对象，相当于new RefValue()
 var v = RefValue?    // 引用类型也可以使用?表示当前变量是可空变量，它的初始值为nil，使用时必须先判断是否为空
+
+var a, b, c, d = 0
 ```
 
 ## 错误处理
@@ -420,17 +422,17 @@ func center(Rect) Point {
 
 // read-only
 func width(Rect) double {
-  return .size.width
+  return self.size.width
 }
 
 // const version
 func print(Test) void {
-  Print(.size) // 相当于Print(self.size)
+  Print(self.size) // 相当于Print(self.size)
 }
 
 // mutable version
 func print(var Test) void {
-  Print(.size)
+  Print(self.size)
 }
 
 func @override start(Test) int, Func {
