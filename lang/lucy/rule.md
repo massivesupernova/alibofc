@@ -176,7 +176,7 @@ struct/class作用域 {
   // 变量
   var a = 0        // public variable
   var _a = 0       // private variable, only available to current file
-  var aa = int?    // 不进行初始化的变量
+  var aa = int?    // 不进行初始化的变量，去掉对非初始化变量的支持
   var bb = RefObj? // ???
 
   // 不可修改变量
@@ -245,7 +245,7 @@ var d = 32.2
 var e = 23f
 var f = 23ull
 
-var addFunc0 = func (int a, b) int { 
+var addFunc0 = func (int a, b) int { // { (int a, b) int | return a + b }
   return a + b 
 }
 
@@ -253,26 +253,26 @@ var addFunc1 = addFunc
 
 typedef Func = func (int a, b) int // 必须给定参数名称
 
-var addFunc2 = Func {
+var addFunc2 = Func { // { Func | return $a + $b }
   return $a + $b
 }
 
 var a = 0
 
-var addFunc3 = Func [a] { // 这里[]内的a是传递实参不是参数定义
+var addFunc3 = Func [a] { // 这里[]内的a是传递实参不是参数定义 // { Func [a] |
   return a + $a + $b // 或者 return a + $1 + $2
 }
 
-var addFunc4 = Func [&a] { // 这里[]内的a是传递实参不是参数定义
+var addFunc4 = Func [&a] { // 这里[]内的a是传递实参不是参数定义 // { Func [&a] |
   a += 1
   return a + $a + $b
 }
 
-var addFunc5 = func (int x, y) int {
+var addFunc5 = func (int x, y) int { // { (int x, y) int | return x + y }
   return x + y
 }
 
-var addFunc6 = func [a](int x, y) int {
+var addFunc6 = func [a](int x, y) int { // { [a] (int x, y) int | return a + x + y }
   return a + x + y
 }
 
@@ -328,7 +328,7 @@ import lucy.stream.* //提示所有同名标识符，using只能占用一行
 // - const
 // - class
 
-typedef Func = func (int a, int b) int
+typedef Func = func (int a, b) int
 
 func printTest(int a) byte {
   return byte(a)
@@ -338,11 +338,11 @@ func _printTest() byte, byte {
   return 1, 1
 }
 
-var addFunc = Func {
+var addFunc = Func {    // var addFunc = { Func |
   return $a + $b
 }
 var x = 3
-var addFunc2 = Func [x] {
+var addFunc2 = Func [x] { // var addFunc2 = { Func [x] |
   return x + $a + $b
 }
 var addFunc3 = addFunc //函数类型可以自动推导出来
@@ -367,6 +367,10 @@ enum Color {
   Yellow
   Blue
 }
+
+var color = Color.Red
+color = .Blue         // 会自动推导类型
+color = .Yellow       // 会自动推导类型
 
 enum Color2 {
   Red = byte(3)
@@ -426,11 +430,11 @@ func print(var Test) void {
 }
 
 func @override start(Test) int, Func {
-  return 1, func (x, y) { return x + y }
+  return 1, func (int x, y) int { return x + y } // return 1, { (int x, y) int | return x + y }
 }
 
 func _start(Test, int a) int num, Func sum {
-  return 2, func [a](x, y) { return a + x + y }
+  return 2, func [a](int x, y) int { return a + x + y } // return 2, { [a](int x, y) int | return a + x + y}
 }
 
 func _start(var Test, int a, b) {
@@ -458,6 +462,19 @@ func Test:create() Test {
 值类型与引用类型的区别：
 1. 值类型的对象都拥有相互独立的值，不相互影响
 2. 引用类型的对象是共享的，多个变量可以引用同一个对象
+
+按照通用的准则，当符合一条或多条以下条件时，请考虑构建结构体：
+- 该数据结构的主要目的是用来封装少量相关简单数据值。
+- 有理由预计该数据结构的实例在被赋值或传递时，封装的数据将会被拷贝而不是被引用。
+- 该数据结构中储存的值类型属性，也应该被拷贝，而不是被引用。
+- 该数据结构不需要去继承另一个既有类型的属性或者行为。
+举例来说，以下情境中适合使用结构体：
+- 几何形状的大小，封装一个 width 属性和 height 属性，两者均为 Double 类型。
+- 一定范围内的路径，封装一个 start 属性和 length 属性，两者均为 Int 类型。
+- 三维坐标系内一点，封装 x ， y 和 z 属性，三者均为 Double 类型。
+在所有其它案例中，定义一个类，生成一个它的实例，并通过引用来管理和传递。实际中，这意味着绝大部分的
+自定义数据构造都应该是类，而非结构体。
+
 
 ???如果管理引用类型的内存
 
