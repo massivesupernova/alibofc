@@ -91,4 +91,53 @@ val rval = new RefData()
 calc(rval)  //rval保证不会改变
 calc(&rval) //rval会改变
 rval = createRefData() //rval引用到新的对象
+
+## 函数参数语法
+*parameter表示形参，argument表示实参
+
+func foo(int a, double b) void { /**/ }
+func foo(immutable int a, immutable double b) void { /**/ }
+func foo(int a, b, double c) void { /**/ }
+func bar(inout int a, b, int c, d, double e) void { /**/ }
+
+Parameter:
+  ParameterQualifier ParameterDefinition |
+  ParameterDefinition |
+  "@"
+
+ParameterWithDefaultValue:
+  ParameterDefinition "=" Expression
+
+ParameterQualifier:
+  "immutable" | 
+  "inout"
+
+// TypeName cannot be "void"
+ParameterDefinition:
+  TypeName ParameterName |
+  ParameterName
+
+VariableParameterDefinition:
+  "..." ParameterName
+
+// TypeName cannot be "void"
+SameTypeVariableParamerDefinition:
+  TypeName "..." ParameterName
+
+ParameterList:
+  Parameter |
+  ParameterList "," Parameter
+
+VariableParameterList:
+  VariableParameterDefinition |
+  SameTypeVariableParamerDefinition |
+  ParameterList "," VariableParameterDefinition |
+  ParameterList "," SameTypeVariableParamerDefinition
+
+ParameterPart:
+  "(" ")" |
+  "(" ParameterList ")" |
+  "(" VariableParameterList ")"
+  
+
 ```
