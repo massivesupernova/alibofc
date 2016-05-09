@@ -141,3 +141,50 @@ ParameterPart:
   
 
 ```
+
+## 自定义类型中的函数
+
+**构造和析构函数**
+```c
+class Test {
+  var size = int
+  init() @zero
+  init(int size) {
+    .size = size
+  }
+  deinit() {
+    /**/
+  }
+}
+```
+
+**静态函数**
+```c
+// 全局可访问静态函数
+func Test:create(int size) Test {
+  return Test(size)
+}
+// 仅限当前文件访问
+func Test:_create() Test {
+  return Test.create(1)
+}
+```
+
+**成员函数**
+```c
+func Test.start(self, int flag) void {
+  startTest((self.size + 8) & flag)
+}
+func Test._start(self, int flag) void {
+  startTest((self.size + 8) & flag)
+}
+func Test.start(inout self, int flag) void {
+  self.size += 8
+  startTest(self.size & flag)
+}
+func Test._start(inout self, int flag) void {
+  self.size += 8
+  startTest(self.size & flag)
+}
+```
+
