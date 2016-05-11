@@ -95,24 +95,20 @@ rval = createRefData() //rval引用到新的对象
 ## 函数参数语法
 *parameter表示形参，argument表示实参
 
-func foo(int a, double b) void { /**/ }
-func foo(immutable int a, immutable double b) void { /**/ }
-func foo(int a, b, double c) void { /**/ }
-func bar(inout int a, b, int c, d, double e) void { /**/ }
+// 如果没有返回值，无需使用void
+func foo(int a, double b) { /**/ }
+func foo(in int a, b, in double c) int { /**/ }
+func bar(inout int a, b, int c, d, double e) int { /**/ }
 
 Parameter:
   ParameterQualifier ParameterDefinition |
-  ParameterDefinition |
-  "@"
-
-ParameterWithDefaultValue:
-  ParameterDefinition "=" Expression
+  ParameterDefinition
 
 ParameterQualifier:
-  "immutable" | 
+  "in" | 
   "inout"
 
-// TypeName cannot be "void"
+// TypeName cannot be "void", void不是一个关键字
 ParameterDefinition:
   TypeName ParameterName |
   ParameterName
@@ -120,7 +116,7 @@ ParameterDefinition:
 VariableParameterDefinition:
   "..." ParameterName
 
-// TypeName cannot be "void"
+// TypeName cannot be "void"，void不是一个关键字
 SameTypeVariableParamerDefinition:
   TypeName "..." ParameterName
 
@@ -128,6 +124,7 @@ ParameterList:
   Parameter |
   ParameterList "," Parameter
 
+// 可变参数只能是作为最后一个参数
 VariableParameterList:
   VariableParameterDefinition |
   SameTypeVariableParamerDefinition |
@@ -188,3 +185,66 @@ func Test._start(inout self, int flag) void {
 }
 ```
 
+**默认参数和显式命名参数**
+```c
+// 默认参数只能用@paraName显示命名方式定义，参数列表内的参数不能带返回值
+func foo(int a, b, double... dargs) {
+  @c double  // 无默认参数的参数可以是in也可以是inout
+  @d = 3.14f // 有默认参数的参数只能是in，不能是inout类型的参数
+}
+foo(1, 2, .c=3.0, 1.0, 2.0)
+foo(.c=3.0, 1, 2, 1.0, 2.0, .d=6.28f)
+```
+
+**tuple参数的处理**
+```c
+只能作为最后一个参数，每次调用都会产生一个新的结构体，也即自动生成一个新的重载函数
+func print_tuple_int_double({.a=1, .b=3.14} arg) {}
+func print_tuple_int_int({.a = 1, .b = 2} arg) {}
+```
+
+**可变单一类型参数的处理**
+```c
+只能作为最后一个参数，每次调用不会产生新的重载
+func print(int... args) {}
+逻辑上等价于函数:
+func print_arr([int] iarr) {}
+但是两者的调用方式不同：
+print(1, 2, 3, 4)
+print_arr([1, 2, 3, 4])
+```
+
+**函数重载的处理**
+```c
+1. 一个文件内（包括导入的名称）相同的函数名称，定义了一组重载的函数，级重载函数拥有相同的函数名
+2. 根据以下规则来决定最终会调用那个函数（如果能调用多于一个函数，应该报错）
+   - 先去掉所有的显示命名参数，然后从左到右边依次比较实参和形参的类型
+   - 除了实参子类的情况，类型必须完全匹配，只要有一个不匹配就会报错终止
+   - 再检查显式命名参数，所有的显示名称都必须完全匹配，否则会报错终止
+3. 返回值的处理：同一列重载函数可以有不同的返回类型，只要它们能够赋给同一类型（基类或整数最大类型等）
+```
+
+**多个返回值的处理**
+```c
+func bar() int, double {}
+var ival, dval = bar()
+
+//返回值@error必须进行错误处理，否则会报编译错误
+func create() @error, Test {}
+var ok, test = create()
+if !ok {
+  /* error log */
+}
+```
+
+**解释器的原理**
+```c
+将支持的函数都生成到动态库中
+程序的解释过程，即解析代码中的操作然后动态调用动态库中对应的操作的过程
+```
+
+**操作符重载**
+
+**匿名函数的写法**
+
+**函数赋值变量的写法**
