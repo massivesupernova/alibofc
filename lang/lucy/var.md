@@ -52,8 +52,8 @@ var s3 = {"""2 //去掉行前的2个空格
 """}
 var s4 = {```2
   string line one
-  string line two
-```}
+  string line two```} //与上面相同，只是少了最后一行的换行符号
+
 // 4. 将文件转换成字符串
 var s4 = ```here is a string of file =>{{#inc "layout/header.html"}}```
 
