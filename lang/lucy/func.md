@@ -248,3 +248,18 @@ if !ok {
 **匿名函数的写法**
 
 **函数赋值变量的写法**
+
+**省略调用***
+```c
+// call function that has only one argument with string/array/table/set type:
+Test.print(string s) void { /* ... */ }
+Test.print([|int] a) void { /* ... */ }
+Test.print([int] a) void { /* ... */ }
+Test.print([int:string] t) void { /* ... */ }
+
+var test = Test()
+test.print"abcd"
+test.print[|1, 2, 3]
+test.print[23, 12,]
+test.print[12:"a", 23:"b"]
+```
