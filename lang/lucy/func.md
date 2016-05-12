@@ -169,17 +169,17 @@ func Test:_create() Test {
 
 **成员函数**
 ```c
-func Test.start(self, int flag) void {
+func Test.start(self, int flag) {
   startTest((self.size + 8) & flag)
 }
-func Test._start(self, int flag) void {
+func Test._start(self, int flag) {
   startTest((self.size + 8) & flag)
 }
-func Test.start(inout self, int flag) void {
+func Test.start(inout self, int flag) {
   self.size += 8
   startTest(self.size & flag)
 }
-func Test._start(inout self, int flag) void {
+func Test._start(inout self, int flag) {
   self.size += 8
   startTest(self.size & flag)
 }
@@ -252,10 +252,10 @@ if !ok {
 **省略调用***
 ```c
 // call function that has only one argument with string/array/table/set type:
-Test.print(string s) void { /* ... */ }
-Test.print([|int] a) void { /* ... */ }
-Test.print([int] a) void { /* ... */ }
-Test.print([int:string] t) void { /* ... */ }
+Test.print(string s) { /* ... */ }
+Test.print([|int] a) { /* ... */ }
+Test.print([int] a) { /* ... */ }
+Test.print([int:string] t) { /* ... */ }
 
 var test = Test()
 test.print"abcd"
