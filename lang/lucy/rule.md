@@ -6,7 +6,7 @@
 ```c
 void
 bool - true false
-char/utf8/utf16/utf32 - unsigned type
+char - unsigned type
 byte/int8 - unsigned/signed 8-bit integer
 uint/int - unsigned/signed integer at least with pointer-size
 uptr      - uint
@@ -65,7 +65,6 @@ var a, b, c, d = 0
 var a = 3.0
 var str = "double = {{a}}"
 var s2 = "complex calculate {{
-  var b = 3.14
   add(a, b, c) //上文必须已经定义了a和c，以及函数add
 }}"
 
@@ -86,7 +85,7 @@ var s4 = {```2
 var s4 = ```here is a string of file =>{{#inc "layout/header.html"}}```
 
 // @calculate函数中的@参数必须通过显式参数名称传递参数，例如calcluate(3.14, 1.0, .a = 42)
-func calculate(double dval, dval2, @) void {
+func calculate(double dval, dval2) {
   // @a int 表示a是这个函数的一个int参数，并且没有默认值
   // @b = 3.21 表示b是这个函数的一个double参数，并且有默认值3.21 
   add(@a int, @b = 3.21)
