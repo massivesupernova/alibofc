@@ -23,7 +23,17 @@
 *二义性处理：使用贪婪法尽可能多的匹配输入串；先定义的优先匹配，例如"+"和"+="；
 
 === Peg (Parsing Expression Grammars)
-
+n: 匹配n个字符
+"abc": 匹配字符a和b和c
+Before(Expr): 当前位置之前匹配表达式Expr，不消耗字符
+Range("az"), Range("az", "09", "AA", "BC"): 字符范围
+Set("abc*/+"): 匹配其中的单一字符
+#Expr: 当前位置之后匹配Expr，不消耗字符
+-Expr: 只要当不匹配Expr是才匹配成功
+Expr1+Expr2: 匹配其中一个表达式即匹配成功
+Expr1-Expr2: 只要当不匹配Expr2但匹配Expr1时才匹配成功
+Expr1*Expr2: 匹配Expr1并且匹配Expr2是才匹配成功
+Expr^n: 匹配n个或多个Expr1
 
 ```
 
