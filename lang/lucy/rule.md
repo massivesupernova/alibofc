@@ -71,7 +71,7 @@ var s2 = "complex calculate {{
 // 1. 普通字符串
 var s1 = "doube dval = {{dval}}\tfloat fval = {{fval}}\n"
 // 2. 原始字符串，不会对其中的字符进行转义
-var s2 = `TAG`c:\nop\data.txt`TAG`
+var s2 = `TAG`c:\nop\data.txt`TAG` ~ ```second part```
 // 3. 多行字符串，相当于"string line one\nstring line two\n"
 var s4 = {`TAG`2
   string line one
