@@ -73,16 +73,12 @@ var s1 = "doube dval = {{dval}}\tfloat fval = {{fval}}\n"
 // 2. 原始字符串，不会对其中的字符进行转义
 var s2 = `TAG`c:\nop\data.txt`TAG`
 // 3. 多行字符串，相当于"string line one\nstring line two\n"
-var s4 = {"TAG"2 //去掉行前的2个空格
-  string line one
-  string line two
-"TAG"}
-var s5 = {`TAG`2
+var s4 = {`TAG`2
   string line one
   string line two
 `TAG`} \n
 // 4. 将文件转换成字符串
-var s4 = {```2 eval from {{ to }}
+var s5 = {```2 eval from {{ to }}
   here is a string of file =>{{#inc "layout/header.html"}}
 ```}
 
