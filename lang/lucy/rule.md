@@ -82,7 +82,9 @@ var s5 = {`TAG`2
   string line two
 `TAG`} \n
 // 4. 将文件转换成字符串
-var s4 = ```here is a string of file =>{{#inc "layout/header.html"}}```
+var s4 = {```2 escape {{ and }}
+  here is a string of file =>{{#inc "layout/header.html"}}
+```}
 
 // @calculate函数中的@参数必须通过显式参数名称传递参数，例如calcluate(3.14, 1.0, .a = 42)
 func calculate(double dval, dval2) {
