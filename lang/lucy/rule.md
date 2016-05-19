@@ -82,7 +82,7 @@ var s5 = {`TAG`2
   string line two
 `TAG`} \n
 // 4. 将文件转换成字符串
-var s4 = {```2 escape {{ and }}
+var s4 = {```2 eval from {{ to }}
   here is a string of file =>{{#inc "layout/header.html"}}
 ```}
 
