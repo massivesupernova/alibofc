@@ -29,11 +29,11 @@ We use `0000`, `0001`, `0010`, and `0011` to identify them.
     11[00XXXX] -> identified by 0011
 
 Summary about binary byte:
-- type 00[??XXXX] is directly encoded separately using one character
+- type 00[??XXXX] is directly encoded using one character
 - other types indentified by 01, 10, 11, 0000, 0001, 0010, 0011 are all encoded as a sequnce form using multiple characters
 
 Special rules:
-- binary byte has `0000` type can only be encoded using 2 characters
+- binary byte has `0000` type can only be encoded separately using 2 characters
 - 3 continuous binary bytes of `11` type cannot be encoded together, because the first character will be 0x7F (it is not printable)
 
 So middle 6 bits `MMMMMM` in the first character [0|MMMMMM|1] has following possibles.
