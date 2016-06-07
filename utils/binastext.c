@@ -29,7 +29,7 @@ We use `0000`, `0001`, `0010`, and `0011` to identify them.
     11[00XXXX] -> identified by 0011
 
 Summary about binary byte:
-- type 00[??XXXX] is directly encoded using one character
+- type 00[??XXXX] is directly encoded separately using one character
 - other types indentified by 01, 10, 11, 0000, 0001, 0010, 0011 are all encoded as a sequnce form using multiple characters
 
 Special rules:
