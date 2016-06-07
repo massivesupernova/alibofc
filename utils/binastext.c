@@ -36,7 +36,8 @@ Special rules:
 - binary byte has `0000` type can only be encoded using 2 characters
 - 3 continuous binary bytes of `11` type cannot be encoded together, because the first character will be 0x7F (it is not printable)
 
-So middle 6 bits `MMMMMM` in the first character [0|MMMMMM|1] has following possibles:
+So middle 6 bits `MMMMMM` in the first character [0|MMMMMM|1] has following possibles.
+Six bits can encode 64 numbers, following has total 63 numbers without `111111`.
 - encode a sequence with 1-byte
         => 010000 100000 110000 000000 000100 001000 001100
 - encode a sequence with 2-byte
