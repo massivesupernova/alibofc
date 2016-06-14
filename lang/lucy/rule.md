@@ -12,6 +12,7 @@ half/uhalf - 16-bit
 full/ufull - 32-bit
 long/ulong - 64-bit
 cent/ucent - 128-bit
+iptr/uptr  - machine word size
 int/uint - at least 64-bit
 float/double/real - 32/64/128-bit real
 
