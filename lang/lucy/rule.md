@@ -42,11 +42,51 @@ Integer default type:
 
 **string**
 ```c
+var str = "double = {{a}}"
+var s2 = "complex calculate {{
+  add(a, b, c) //上文必须已经定义了a和c，以及函数add
+}}"
+
+// 1. 普通字符串
+var s1 = "doube dval = {{dval}}\tfloat fval = {{fval}}\n"
+// 2. 原始字符串，不会对其中的字符进行转义
+var s2 = r"TAG"c:\nop\data.txt"TAG" ~ r"""second part"""
+var s3 = x"0A 00 F BCD 32" //相当于"\x0A\x00\xFB\xCD\x32"
+// 3. 多行字符串，相当于"string line one\nstring line two" ~ "\n"
+var s4 = {"TAG"2
+  string line one
+  string line two
+"TAG"} \n
+// 4. 将文件转换成字符串 //处于安全考虑，#inc只认可相对路径和通过编译器开关控制的搜素路径
+var s5 = {"""2 eval from {{ to }}
+  here is a string of file =>{{#inc "layout/header.html"}}
+"""}
+
 __DATE__
 __TIME__
 __FUNC__
 __LINE__
 __CMPL__
+```
+
+**container**
+```c
+```
+
+**struct**
+```c
+```
+
+**class**
+```c
+```
+
+**function**
+```c
+```
+
+**constant object**
+```c
 ```
 
 **object define**
@@ -122,27 +162,6 @@ var a, b, c, d = 0
 
 ## Standard Container
 ```c
-var a = 3.0
-var str = "double = {{a}}"
-var s2 = "complex calculate {{
-  add(a, b, c) //上文必须已经定义了a和c，以及函数add
-}}"
-
-// 1. 普通字符串
-var s1 = "doube dval = {{dval}}\tfloat fval = {{fval}}\n"
-// 2. 原始字符串，不会对其中的字符进行转义
-var s2 = r"TAG"c:\nop\data.txt"TAG" ~ r"""second part"""
-var s3 = x"0A 00 F BCD 32" //相当于"\x0A\x00\xFB\xCD\x32"
-// 3. 多行字符串，相当于"string line one\nstring line two" ~ "\n"
-var s4 = {"TAG"2
-  string line one
-  string line two
-"TAG"} \n
-// 4. 将文件转换成字符串 //处于安全考虑，#inc只认可相对路径和通过编译器开关控制的搜素路径
-var s5 = {"""2 eval from {{ to }}
-  here is a string of file =>{{#inc "layout/header.html"}}
-"""}
-
 // @calculate函数中的@参数必须通过显式参数名称传递参数，例如calcluate(3.14, 1.0, .a = 42)
 func calculate(double dval, dval2) {
   // @a int 表示a是这个函数的一个int参数，并且没有默认值
