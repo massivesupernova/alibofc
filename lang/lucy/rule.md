@@ -2,7 +2,39 @@
 - https://developer.apple.com/swift/
 - https://onevcat.com/2014/06/walk-in-swift/
 
-## Primary Types
+**interger**
+```c
+bool - true false
+char - unsigned byte
+byte - unsigned byte
+int8 - signed byte
+half/uhalf - 16-bit
+full/ufull - 32-bit
+long/ulong - 64-bit
+cent/ucent - 128-bit
+int/uint - at least 64-bit
+float/double/real - 32/64/128-bit real
+
+// integer suffix and user defined suffix
+def a = 12'int8
+def b = 12'byte
+def len = 100'km
+
+Iteger: // std.conv.octal octal!237_777
+  DecimalInteger        "0 1 2 3 4 5 6 7 8 9 _" 只能以数字开头，开头不能有多个0
+  BinaryInteger         0b/0B"0 1 _"
+  OctalInteger          0o/0O"0 1 2 3 4 5 6 7 _"
+  HexadecimalInterger   0x/0X"0 1 2 3 4 5 6 7 8 9 A a B b C c D d E e F f _"
+  
+Integer default type:
+0 -> 2_147_483_647                             int
+2_147_483_648 -> 9_223_372_036_854_775_807     int
+0x0 -> 0x7FFF_FFFF                             int
+0x8000_0000 -> 0xFFFF_FFFF                     int
+0x1_0000_0000 -> 0x7FFF_FFFF_FFFF_FFFF         int
+0x8000_0000_0000_0000 -> 0xFFFF_FFFF_FFFF_FFFF uint
+```
+
 ```c
 void
 bool - true false
