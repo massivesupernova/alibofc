@@ -36,6 +36,33 @@ Integer default type:
 0x8000_0000_0000_0000 -> 0xFFFF_FFFF_FFFF_FFFF uint
 ```
 
+**float**
+```c
+```
+
+**string**
+```c
+__DATE__
+__TIME__
+__FUNC__
+__LINE__
+__CMPL__
+```
+
+**object define**
+```c
+def dval = 1.0         // default can be modified
+def car = 3.0 frozen   // frozen object is immutable
+def str = "abc" frozen
+def status, data = requireData() frozen data
+func calc(int a, b) int {
+  return a + b
+}
+def calc = { (int a, b) int | frozen
+  return a + b
+}
+```
+
 ```c
 void
 bool - true false
