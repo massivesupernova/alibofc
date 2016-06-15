@@ -14,12 +14,11 @@ long/ulong - 64-bit
 cent/ucent - 128-bit
 iptr/uptr  - machine word size
 int/uint - at least 64-bit
-float/double/real - 32/64/128-bit real
 
 // integer suffix and user defined suffix
-def a = 12'int8
-def b = 12'byte
-def len = 100'km
+var a = 12'int8
+var b = 12'byte
+var len = 100'km
 
 Iteger: // std.conv.octal octal!237_777
   DecimalInteger        "0 1 2 3 4 5 6 7 8 9 _" 只能以数字开头，开头不能有多个0
@@ -38,6 +37,8 @@ Integer default type:
 
 **float**
 ```c
+float/double/real - 32/64/128-bit real
+
 ```
 
 **string**
@@ -91,14 +92,14 @@ __CMPL__
 
 **object define**
 ```c
-def dval = 1.0         // default can be modified
-def car = 3.0 frozen   // frozen object is immutable
-def str = "abc" frozen
-def status, data = requireData() frozen data
+var dval = 1.0         // default can be modified
+var car = 3.0 frozen   // frozen object is immutable
+var str = "abc" frozen
+var status, data = requireData() frozen data
 func calc(int a, b) int {
   return a + b
 }
-def calc = { (int a, b) int | frozen
+var calc = { (int a, b) int | frozen
   return a + b
 }
 ```
