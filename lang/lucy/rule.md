@@ -51,15 +51,15 @@ var s2 = "complex calculate {{
 // 1. 普通字符串
 var s1 = "doube dval = {{dval}}\tfloat fval = {{fval}}\n"
 // 2. 原始字符串，不会对其中的字符进行转义
-var s2 = r"TAG"c:\nop\data.txt"TAG" ~ r"""second part"""
+var s2 = r"c:\nop\data.txt" ~ r"second part"   // only escape character '\"'
 var s3 = x"0A 00 F BCD 32" //相当于"\x0A\x00\xFB\xCD\x32"
 // 3. 多行字符串，相当于"string line one\nstring line two" ~ "\n"
-var s4 = {"TAG"2
+var s4 = {"""&@#**2 raw     // doesn't escape any characters
   string line one
   string line two
-"TAG"} \n
+"""&@#**} \n
 // 4. 将文件转换成字符串 //处于安全考虑，#inc只认可相对路径和通过编译器开关控制的搜素路径
-var s5 = {"""2 eval from {{ to }}
+var s5 = {"""2          // only escape character "\{" and "\}"
   here is a string of file =>{{#inc "layout/header.html"}}
 """}
 
