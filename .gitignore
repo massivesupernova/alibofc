@@ -1,0 +1,5 @@
+*.o
+*.a
+3rd/lua/src/lua
+3rd/lua/src/luac
+3rd/lpeg/lpeg.so

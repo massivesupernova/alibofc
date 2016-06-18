@@ -1,6 +1,6 @@
 linux:
-	cd lua && make linux && cd ..
-	cd lpeg && make linux && cd ..
+	cd lua && (make linux || /bin/echo -e "\033[41;37mfailure: install libreadline-dev first\033[0m") && cd ..
+	cd lpeg && make LUADIR="../lua/src/" linux && cd ..
 
 install:
 	cd lua && make install && cd ..
