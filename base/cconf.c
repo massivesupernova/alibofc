@@ -24,7 +24,7 @@ int main() {
   ByteOrderTest data;
   data.i = 0xABCDEF;
   if (sizeof(unsigned int) < 4) {
-    printf("[E] the size of char type is incorrect\n");
+    printf("[E] the size of int type is incorrect\n");
     exit(1);
   }
   if (data.c[0] == 0xEF && data.c[1] == 0xCD && data.c[2] == 0xAB && data.c[3] == 0x00) {
