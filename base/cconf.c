@@ -6,6 +6,11 @@
   if (fprintf(file, "%s\n", s) <= 0) { printf("[E] write '%s' to file failed\n", s); exit(1); } \
   printf("%s\n", s)
 
+typedef union {
+  unsigned char c[sizeof(int)];
+  unsigned int  i;
+} ByteOrderTest;
+
 int main() {
   FILE* file = fopen("cconf.h", "wb");
   if (file == 0) {
@@ -16,12 +21,17 @@ int main() {
   WRITE_LINE("#define _CRT_SECURE_NO_WARNINGS");
 
   // byte-order
-  int value = 0xABCD;
-  if ((value & 0xFF) == 0xAB) {
+  ByteOrderTest data;
+  data.i = 0xABCDEF;
+  if (sizeof(unsigned int) < 4) {
+    printf("[E] the size of char type is incorrect\n");
+    exit(1);
+  }
+  if (data.c[0] == 0xEF && data.c[1] == 0xCD && data.c[2] == 0xAB && data.c[3] == 0x00) {
     WRITE_LINE("#define IS_LITTLE_ENDIAN 1\n");
   }
   else {
-    if ((value & 0xFF) != 0xCD) {
+    if (data.c[0] != 0x00) {
         printf("[E] byte order test failed\n");
         exit(1);
     }
