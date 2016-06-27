@@ -7,7 +7,7 @@
   printf("%s\n", s)
 
 typedef union {
-  unsigned char c[sizeof(int)];
+  unsigned char c[sizeof(unsigned int)];
   unsigned int  i;
 } ByteOrderTest;
 
