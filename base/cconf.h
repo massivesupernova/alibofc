@@ -103,4 +103,81 @@ typedef uint64_t uint64;
 #define platform_32_bit 1
 #define platform_64_bit 0
 
+#if 0
+_MSC_VER COMPILER_MSC
+_WINDOWS GUI_APPLICATION
+_CONSOLE CUI_APPLICATION
+__CYGWIN__
+__CYGWIN32__
+__MINGW32__
+__GNUC__
+__APPLE_CC__
+__STDC_VERSION__
+__INTEL_COMPILER
+__SUNPRO_CC
+__IBMCPP__
+
+/* This directive is currently not supported on Mac OS X (it will give
+ * a compiler error), since compile-time TLS is not supported in the Mac OS X
+ * executable format. Also, some older versions of MinGW (before GCC 4.x) do
+ * not support this directive.
+ */
+/* FIXME: Check for a PROPER value of __STDC_VERSION__ to know if we have C11 */
+#if !(defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201102L)) && !defined(_Thread_local)
+ #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__SUNPRO_CC) || defined(__IBMCPP__)
+  #define _Thread_local __thread
+ #else
+  #define _Thread_local __declspec(thread)
+ #endif
+#endif
+
+#define UNICODE
+#define _UNICODE
+#define WIN32_LEAN_AND_MEAN
+//WINVER – used to enable features only available in newer operating systems.
+//Define it to 0x0501 for Windows XP, and 0x0600 for Windows Vista.
+#include <windows.h>
+
+// https://msdn.microsoft.com/en-us/library/aa384198(VS.85).aspx
+
+#if defined(_WIN16)
+#define PLATFORM_WIN16 1
+#else
+#define PLATFORM_WIN16 0
+#endif
+
+#if defined(_WIN32)
+#define PLATFORM_WIN32 1
+#else
+#define PLATFORM_WIN32 0
+#endif
+
+/* _WIN32 is also defined by the 64-bit compiler for backward compatibility */
+#if defined(_WIN64)
+#define PLATFORM_WIN64 1
+#else
+#define PLATFORM_WIN64 0
+#endif
+
+#if defined(_M_IX86)
+#define ARCHITECTURE_X86 1
+#else
+#define ARCHITECTURE_X86 0
+#endif
+
+#if defined(_M_X64)
+#define ARCHITECTURE_X64 1
+#else
+#define ARCHITECTURE_X64 0
+#endif
+
+/* Intel Itanium platform */
+#if defined(_M_IA64)
+#define ARCHITECTURE_IA64 1
+#else
+#define ARCHITECTURE_IA64 0
+#endif
+
+#endif
+
 #endif // BASE_CCONF_H
