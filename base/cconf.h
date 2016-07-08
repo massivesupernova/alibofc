@@ -117,6 +117,14 @@ __INTEL_COMPILER
 __SUNPRO_CC
 __IBMCPP__
 
+#ifdef __linux__
+#include "socket_epoll.h"
+#endif
+
+#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined (__NetBSD__)
+#include "socket_kqueue.h"
+#endif
+
 /* This directive is currently not supported on Mac OS X (it will give
  * a compiler error), since compile-time TLS is not supported in the Mac OS X
  * executable format. Also, some older versions of MinGW (before GCC 4.x) do
