@@ -16,12 +16,12 @@ int main(int argc, char** argv) {
     return 1;
   }
   FILE* outfile = 0;
-  char outname[32];
-  int fileno = 1001;
+  char outname[128] = {0};
+  long fileno = 1001;
   int logcount = 0;
   unsigned long maxfilebytes = (unsigned long)(1024*1024) * (unsigned long)4000;
   for (;;) {
-    if (sprintf(outname, "./part.%d", fileno++) < 11) {
+    if (sprintf(outname, "./part.%ld", fileno++) < 11) {
       printf("[E] Generate output file name failed\n");
       goto close_infile_and_return_fail;
     }
