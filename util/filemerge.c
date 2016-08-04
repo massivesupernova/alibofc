@@ -13,12 +13,11 @@ int main(int argc, char** argv) {
     return 1;
   }
   int len = 0;
-  while (dest_folder[len] != 0) {
-    ++len;
-  }
-  if (len > 4000) {
-    printf("[E] Specified folder path is too long.\n");
-    return 1;
+  while (dest_folder[len++] != 0) {
+    if (len > 4000) {
+      printf("[E] Specified folder path is too long.\n");
+      return 1;
+    }
   }
   char split_file_name[4096] = {0};
   for (len = 0; dest_folder[len] != 0; ++len) {
