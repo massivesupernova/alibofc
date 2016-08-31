@@ -35,14 +35,13 @@ local Cst = lpeg.Cst
 local Keywords = {
   "void", "null",
   "bool", "true", "false",
-  "char", "byte", "int8",
-  "half", "uhalf",
-  "full", "ufull",
-  "long", "ulong",
-  "cent", "ucent",
-  "iptr", "uptr",
-  "int", "uint",
-  "float", "double", "real",
+  "rune", "byte", "int8",
+  "ihalf", "uhalf",
+  "ifull", "ufull",
+  "ilong", "ulong",
+  "icent", "ucent",
+  "int", "uint", "uptr",
+  "float", "double", "freal",
   "var", "imm", "enum", "class",
   "continue", "fallthrough", "break", "goto", "return"
 }
@@ -76,59 +75,83 @@ local Lcontext = {
   BLACKSLASH = {n = 14, s = "BLACKSLASH", h = "BS"};
   BRACKET = {n = 15, s = "BRACKET", h = "BR"};
   INVALIDTOKEN = {n = 16, s = "INVALIDTOKEN", h = "IV"};
+  cursor = 1;
   tokenlineno = 1;
   tokencolumn = 1;
   lineno = 1;
   column = 1;
-  blanklist = nil;
+  prevtoken = nil; -- previous nonblank token
   blanktail = nil;
 }
 
-local Pstartmatch = P(function () {
+local Lheadblank = {
+    type = Lcontext.INVALIDTOKEN;
+    start = 1;
+    text = "";
+    lineno = 1;
+    column = 1;
+    blanks = nil;
+    endpos = 1;
+}
+
+function Lcontext.reset()
+  Lcontext.cursor = 1
+  Lcontext.lineno = 1
+  Lcontext.column = 1
+  Lcontext.prevtoken = nil
+  Lcontext.blanktail = nil
+end
+
+local Cstart = P(function (subject, curpos)
   Lcontext.tokenlineno = Lcontext.lineno
   Lcontext.tokencolumn = Lcontext.column
-})
+  return true, curpos
+end)
 
-local function LfuncNewToken(tokentype, tokenstr, startpos)
-  local tbl = {
-    type = tokentype;
-    tokenstr = tokenstr;
-    startpos = startpos;
+local function LfuncNewToken(type, start, text, endpos)
+  Lcontext.column = Lcontext.column + (endpos - Lcontext.cursor)
+  Lcontext.cursor = endpos
+  local tk = {
+    type = type;
+    start = start;
+    text = text;
     lineno = Lcontext.tokenlineno;
     column = Lcontext.tokencolumn;
-    occupiedlines = 1;
-    tailingblank = nil;
+    blanks = nil; -- blanks behind this token
+    endpos = endpos;
   }
-  if tokentype ~= Lcontext.SPACE and tokentype ~= Lcontext.NEWLINE then
-    tbl.tailingblank = Lcontext.blanklist
-    Lcontext.blanklist = nil
-    Lcontext.blanktail = nil
-    return tbl
+  print("L"..tk.lineno.." C"..tk.column.." P["..start..","..endpos..")",
+      type.s.." #"..#text..":"..text)
+  if type ~= Lcontext.SPACE and type ~= Lcontext.NEWLINE then
+    Lcontext.prevtoken = tk
+    Lcontext.blanktail = tk
+    return tk
   end
-  if Lcontext.blanklist == nil then
-    Lcontext.blanklist = tbl
-    Lcontext.blanktail = tbl
-  else
-    Lcontext.blanktail.tailingblank = tbl
-    Lcontext.blanktail = tbl
+  if Lcontext.prevtoken == nil then
+    Lcontext.prevtoken = Lheadblank
+    Lcontext.blanktail = Lheadblank
   end
-  return tbl
+  Lcontext.blanktail.blanks = tk
+  Lcontext.blanktail = tk
+  return tk
 end
 
 
 -- blank
 
-local Pspace = Cmt(Pstartmatch * Cp() * C(S"\x20\x09\x0B\x0C"^1), function (subject, curpos, startpos, tokenstr)
-  LfuncNewToken(Lcontext.SPACE, startpos, tokenstr)
+local Pspace = Cmt(Cstart * C(S"\x20\x09\x0B\x0C"^1), function (subject, curpos, start, text)
+  LfuncNewToken(Lcontext.SPACE, start, text, curpos)
   return curpos
 end)
 
-local Pnewline = Cmt(Pstartmatch * Cp() * Cst(Newlines), function (subject, curpos, startpos, i)
-  LfuncNewToken(Lcontext.NEWLINE, startpos, Newlines[i])
+local Pnewline = Cmt(Cstart * Cst(Newlines), function (subject, curpos, start, i)
+  LfuncNewToken(Lcontext.NEWLINE, start, Newlines[i], curpos)
   Lcontext.lineno = Lcontext.lineno + 1
   Lcontext.column = 1
   return curpos
 end)
+
+--local Pnewline_in_block = ...
 
 local Pblankopt = (Pnewline + Pspace)^1 + P""
 
@@ -137,6 +160,72 @@ local Pblankopt = (Pnewline + Pspace)^1 + P""
 
 local Ckeyword = Cst(Keywords) / function (i) return Keywords[i] end
 
-local LKeyword = (Pstartmatch * Cp() * Ckeyword * Pblankopt) / function (startpos, tokenstr, blank)
-  return LfuncNewToken(Lcontext.KEYWORD, startpos, tokenstr)
+local Lkeyword = Cmt(Cstart * Ckeyword, function (subject, curpos, start, text)
+  return curpos, LfuncNewToken(Lcontext.KEYWORD, start, text, curpos)
+end) * Pblankopt
+
+
+-- identifier
+
+local Pletter = R("az", "AZ")
+local Pnumber = R("09")
+local Palnum = Pletter + Pnumber
+
+local Cidentifier = C((P"_" + Pletter) * (P"_" + Palnum)^0)
+
+local Lidentifier = (Cstart * Cidentifier * Cp()) / function (start, text, endpos)
+  return LfuncNewToken(Lcontext.IDENTIFIER, start, text, endpos)
+end
+
+
+-- bracket
+
+local Cbracket = C(S"(){}[]")
+
+local Lbracket = (Cstart * Cbracket * Cp()) / function (start, text, endpos)
+  return LfuncNewToken(Lcontext.BRACKET, start, text, endpos)
+end
+
+
+-- test
+
+local function ltest(expr, value)
+  if expr == value then
+    return true
+  end
+  print("ltest failure: " .. tostring(expr) .. " not equal to " .. tostring(value))
+  return false
+end
+
+do
+  local patt = Lkeyword + Lidentifier + Lbracket
+  local subject = "[KW]bool \t \n [KW]float  \r  \n\r   \r\n  "
+  local hint, token
+
+  Lcontext.reset()
+
+  while true do
+    token = patt:match(subject, Lcontext.cursor)
+    if token == nil then break end
+    assert(ltest(token.text, "["))
+
+    token = patt:match(subject, Lcontext.cursor)
+    if token == nil then print"TEST: no hint" break end
+    hint = token.text
+
+    token = patt:match(subject, Lcontext.cursor)
+    if token == nil then print"TEST: no ]" break end
+    assert(ltest(token.text, "]"))
+
+    token = patt:match(subject, Lcontext.cursor)
+    if token == nil then print"TEST: no value" break end
+    assert(ltest(token.type.h, hint))
+
+    print("\t\t["..token.text.."]")
+    local tk = token.blanks
+    while tk ~= nil do
+      print("\t\t"..tk.lineno.." "..tk.column.." "..tk.start.." "..tk.endpos.." "..tk.type.s.." #"..#tk.text)
+      tk = tk.blanks
+    end
+  end
 end
