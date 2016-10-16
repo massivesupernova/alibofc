@@ -53,3 +53,128 @@ Six bits can encode 64 numbers, following has total 63 numbers without `111111`.
         [10][01][01] [10][01][10] [10][01][11] [10][10][01] [10][10][10] [10][10][11] [10][11][01] [10][11][10] [10][11][11]
         [11][01][01] [11][01][10] [11][01][11] [11][10][01] [11][10][10] [11][10][11] [11][11][01] [11][11][10]
 */
+
+#include <stdio.h>
+
+static const int MAX_BYTES = 1024*1024;
+static unsigned char bf[MAX_BYTES+4] = {0};
+
+int readFile(FILE* file, int* bytes) {
+  size_t sz = 0;
+  sz = fread(bf, 1, MAX_BYTES, file);
+  *bytes = (int)sz;
+  if (sz != MAX_BYTES) {
+    return EOF;
+  }
+  return 0;
+}
+
+int readBytes(int i, int len, unsigned char* ch) {
+  int count = 0;
+  unsigned char curChar = 0;
+  if (i >= len) {
+    return 0;
+  }
+  curChar = bf[i++];
+  ch[count++] = curChar;
+  if ((curChar & 0x30) == 0 || (curChar & 0xC0) == 0) {
+    return 1;
+  }
+  if (i >= len) {
+    return 1;
+  }
+  curChar = bf[i++];
+  ch[count++] = curChar;
+  if ((curChar & 0x30) == 0 || (curChar & 0xC0) == 0) {
+    return 1;
+  }
+  if (i >= len) {
+    return 2;
+  }
+  curChar = bf[i++];
+  ch[count++] = curChar;
+  if ((curChar & 0x30) == 0 || (curChar & 0xC0) == 0 || (curChar & 0xC0) == 0xC0) {
+    return 2;
+  }
+  return 3;
+}
+
+int writeFormatedFile(FILE* outfile, int nBytes) {
+  int i = 0;
+  int encodeLen = 0;
+  unsigned char ch[5] = {0};
+  for (; (encodeLen = readBytes(i, nBytes, ch)) > 0; i += encodeLen) {
+    unsigned char destStr[5] = {0};
+    int count = 0;
+    if (encodeLen == 1) {
+      if ((ch[0] & 0x30) == 0) {    // 00[00XXXX] => [0|010010|1][0|01XXXX|0]
+        if ((ch[0] & 0xC0) == 0) {  // ??[00XXXX] => [0|010011|1][0|??XXXX|0]
+          destStr[0] = 0x25;
+          destStr[1] = (0x20 | (ch[0] << 1));
+        }
+        else {
+          destStr[0] = 0x27;
+          destStr[1] = (((ch[0] & 0xC0) >> 1) | ((ch[0] & 0x0F) << 1));
+        }
+        count = 2;
+      }
+      else if ((ch[0] & 0xC0) == 0) {
+        destStr[0] = (ch[0] << 1);  // 00[??XXXX] => [0|??XXXX|0]
+        count = 1;
+      }
+      else {                        // ??[??XXXX] => [0|??0000|1][0|??XXXX|0]
+        destStr[0] = ((ch[0] & 0xC0) >> 1) | 0x01;
+        destStr[1] = ((ch[0] & 0x3F) << 1);
+        count = 2;
+      }
+    }
+    else if (encodeLen == 2) {
+      // ??[??XXXX]??[??XXXX] => [0|????00|1][0|??XXXX|0][0|??XXXX|0]
+      count = 3;
+    }
+    else if (encodeLen == 3) {
+      // ??[??XXXX]??[??XXXX] => [0|??????|1][0|??XXXX|0][0|??XXXX|0][0|??XXXX|0]
+      count = 4;
+    }
+    if (fwrite(destStr, 1, count, outfile) != count) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+int main(int argc, char** argv) {
+  if (argc < 2 || argv == 0) {
+    printf("[E] Invalid command line parameters. \nUsage: binastext <target_bin_file> <out_file_name>\n");
+    return 1;
+  }
+  char* filePathString = argv[1];
+  char* outFileName = argv[2];
+  if (filePathString == 0 || filePathString[0] == 0 || outFileName == 0 || outFileName[0] == 0) {
+    printf("[E] Invalid input file path.\n");
+    return 1;
+  }
+  File* infile = fopen(filePathString, "rb");
+  if (infile == 0) {
+    printf("[E] Open file to read failed %s: %s.\n", filePathString, strerror(errno));
+    return 1;
+  }
+  FILE* outfile = fopen(outFileName, "wb");
+  if (outfile == 0) {
+    printf("[E] Open file to write failed %s: %s.\n", outFileName, strerror(errno));
+    return 1;
+  }
+  int nBytes = 0;
+  int result = 0;
+  while ((result = readFile(infile, &nBytes)) != EOF) {
+    if (writeFormatedFile(outfile, nBytes) == 0) {
+      break;
+    }
+  }
+  if (result == EOF) {
+    writeFormatedFile(outfile, nBytes);
+  }
+  fclose(infile);
+  fclose(outfile);
+  return 0;
+}
